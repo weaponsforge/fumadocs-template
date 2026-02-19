@@ -3,6 +3,8 @@ services:
   weaponsforge.fumadocs-dev:
     container_name: weaponsforge-fumadocs-dev
     image: weaponsforge/fumadocs:dev
+    env_file:
+      - ./docsapp/.env.local
     build:
       context: ./docsapp
       dockerfile: Dockerfile

@@ -1,4 +1,4 @@
-import { FileUser, MapPinPlus, Shield, Swords } from "lucide-react";
+import { BookLock, FileUser, MapPinPlus, Shield, Swords } from "lucide-react";
 import Link, { type LinkProps } from "next/link";
 
 const docsTopics = [
@@ -26,6 +26,12 @@ const docsTopics = [
     icon: <MapPinPlus className="size-full" />,
     href: "/docs/maps",
   },
+  {
+    name: "Secrets",
+    description: "MU Online secrets",
+    icon: <BookLock className="size-full" />,
+    href: "/docs/secrets",
+  },
 ];
 
 export default function DocsPage() {
@@ -37,7 +43,7 @@ export default function DocsPage() {
       <p className="text-fd-muted-foreground">
         Portal to different sections of docs.
       </p>
-      <div className="mt-8 grid grid-cols-1 gap-4 text-start md:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-4 text-start sm:grid-cols-2 md:grid-cols-3">
         {docsTopics.map((item) => (
           <Item key={item.name} href={item.href}>
             <Icon>{item.icon}</Icon>
