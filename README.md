@@ -1,20 +1,25 @@
-# devdocs
+# fumadocs-template
 
 This is a Next.js application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs).
 
-Requirements:
+### 📋 Requirements
 
-- NodeJS v24
+1. NodeJS v24
    ```text
    Recommended version (used within this project)
    node v24.11.0
    npm v11.6.1
    ```
 
-Run development server:
+2. Docker (optional)
+
+### 📖 Run development server
 
 ```bash
+# Navigate to the /docsapp directory
+cd docsapp
+
 npm run dev
 # or
 pnpm dev
@@ -24,7 +29,29 @@ yarn dev
 
 Open http://localhost:3000 with your browser to see the result.
 
+### ⚡ Quickstart
+
+Using Docker
+
+1. Set up the environment variables for in the `/docsapp` directory. Refer to the [Environment Variables](#environment-variables) for more information.
+
+2. Build the image for local development..<br>
+   ```sh
+   docker compose build --no-cache
+   ```
+
+3. Run the container for local development.<br>
+   ```sh
+   docker compose up
+   ```
+
+Open http://localhost:3000 with your browser to see the result.
+
 ## Explore
+
+> [!NOTE]
+> The Fumadocs app lives inside the `/docsapp` directory.
+> All files and folders referenced in the following sections are relative to the `/docsapp` directory.
 
 In the project, you can see:
 
@@ -59,4 +86,5 @@ Create a `.env.local` file from the `.env.example` file.
 
 | Variable | Description |
 | --- | --- |
-| IS_BUILD_STATIC | If value is `true`, builds and exports the NextJS app into a static build in the `/out` directory when running `"npm run build"` |
+| IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/nextapp/out` directory when running `"npm run build"` |
+| IS_BUILD_DOCKER | Flag to build the NextJS app for Docker in production using the standalone mode build. | `true`, builds and exports the NextJS app into a static build in the `/out` directory when running `"npm run build"` |

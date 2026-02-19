@@ -1,0 +1,23 @@
+services:
+  # Fumadocs (NextJS) app using app router running for localhost development mode
+  weaponsforge.fumadocs-dev:
+    container_name: weaponsforge-fumadocs-dev
+    image: weaponsforge/fumadocs:dev
+    build:
+      context: ./docsapp
+      dockerfile: Dockerfile
+      target: development
+    networks:
+      - weaponsforge-fumadocs
+    volumes:
+      - ./docsapp:/opt/client
+      - /opt/client/node_modules
+      - /opt/client/.next
+      - /opt/client/.source
+    ports:
+      - "3000:3000"   # NextJS web server
+
+networks:
+  weaponsforge-fumadocs:
+    name: weaponsforge-fumadocs
+    external: false
