@@ -10,7 +10,7 @@ body:
         I'm always frustrated when I can't do X
     validations:
       required: true
-      s
+
   - type: textarea
     attributes:
       label: Describe the solution you'd like
