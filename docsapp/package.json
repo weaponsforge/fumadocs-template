@@ -1,0 +1,36 @@
+{
+  "name": "fumadocs-template",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --turbo",
+    "start": "next start",
+    "postinstall": "fumadocs-mdx",
+    "lint": "biome check",
+    "format": "biome format --write",
+    "docker:build": "IS_BUILD_DOCKER=1 npm run build",
+    "docker:dev": "WATCHPACK_POLLING=true next dev"
+  },
+  "dependencies": {
+    "fumadocs-core": "15.8.3",
+    "fumadocs-mdx": "12.0.2",
+    "fumadocs-ui": "15.8.3",
+    "lucide-react": "^0.544.0",
+    "next": "15.5.9",
+    "next-auth": "^4.24.13",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.5",
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "24.6.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3"
+  }
+}

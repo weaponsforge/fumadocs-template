@@ -1,11 +1,36 @@
-# devdocs
+# fumadocs-template
 
 This is a Next.js application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs).
 
-Run development server:
+It features basic setup, configurations and tooling to standardize using Fumadocs as a template.
+
+### 📋 Requirements
+
+1. NodeJS v24
+   ```text
+   Recommended version (used within this project)
+   node v24.11.0
+   npm v11.6.1
+   ```
+
+2. Google OAuth2 Client (optional)
+   - This requires a Google Cloud Platform project configured with [OAuth2](https://developers.google.com/workspace/guides/configure-oauth-consent) settings and [credentials](https://developers.google.com/workspace/guides/manage-credentials).
+   - Read on the Google [Gmail](https://developers.google.com/gmail/api/guides), [SMTP and OAuth2 Setup](https://github.com/weaponsforge/email-sender?tab=readme-ov-file#using-the-oauth-20-playground) sections for more information.
+   - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
+
+   <br>
+
+   > Setup required only if you want to enable Google sign-in
+
+3. Docker (optional)
+
+### 📖 Run development server
 
 ```bash
+# Navigate to the /docsapp directory
+cd docsapp
+
 npm run dev
 # or
 pnpm dev
@@ -15,7 +40,29 @@ yarn dev
 
 Open http://localhost:3000 with your browser to see the result.
 
+### ⚡ Quickstart
+
+Using Docker
+
+1. Set up the environment variables for in the `/docsapp` directory. Refer to the [Environment Variables](#environment-variables) for more information.
+
+2. Build the image for local development..<br>
+   ```sh
+   docker compose build --no-cache
+   ```
+
+3. Run the container for local development.<br>
+   ```sh
+   docker compose up
+   ```
+
+Open http://localhost:3000 with your browser to see the result.
+
 ## Explore
+
+> [!NOTE]
+> The Fumadocs app lives inside the `/docsapp` directory.
+> All files and folders referenced in the following sections are relative to the `/docsapp` directory.
 
 In the project, you can see:
 
@@ -43,3 +90,22 @@ resources:
   features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 - [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+
+## Environment Variables
+
+Create a `.env.local` file from the `.env.example` file.
+
+| Variable | Description |
+| --- | --- |
+| IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/nextapp/out` directory when running `"npm run build"` |
+| IS_BUILD_DOCKER | Flag to build the NextJS app for Docker in production using the standalone mode build. | `true`, builds and exports the NextJS app into a static build in the `/out` directory when running `"npm run build"` |
+| GOOGLE_CLIENT_ID | Google OAuth2 client ID linked with your Google Cloud Platform project. |
+| GOOGLE_CLIENT_SECRET | Google OAuth2 client secret associated with the `GOOGLE_CLIENT_ID` |
+| NEXTAUTH_SECRET | Your nextauth secret (any random string will do) |
+| NEXTAUTH_URL | Your root domain URL |
+| ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from all Google accounts.</quote> |
+| ALLOWED_EMAILS | Hard-coded list of allowed emails to sign-in with Google. |
+
+@weaponsforge<br>
+20251118<br>
+20260220
