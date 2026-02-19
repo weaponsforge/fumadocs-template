@@ -3,6 +3,8 @@
 This is a Next.js application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs).
 
+It features basic setup, configurations and tooling to standardize using Fumadocs as a template.
+
 ### 📋 Requirements
 
 1. NodeJS v24
@@ -16,6 +18,8 @@ This is a Next.js application generated with
    - This requires a Google Cloud Platform project configured with [OAuth2](https://developers.google.com/workspace/guides/configure-oauth-consent) settings and [credentials](https://developers.google.com/workspace/guides/manage-credentials).
    - Read on the Google [Gmail](https://developers.google.com/gmail/api/guides), [SMTP and OAuth2 Setup](https://github.com/weaponsforge/email-sender?tab=readme-ov-file#using-the-oauth-20-playground) sections for more information.
    - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
+
+   <br>
 
    > Setup required only if you want to enable Google sign-in
 
