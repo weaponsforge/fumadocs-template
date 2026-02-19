@@ -1,5 +1,5 @@
 {
-  "name": "devdocs",
+  "name": "fumadocs-template",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,9 @@
     "start": "next start",
     "postinstall": "fumadocs-mdx",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "docker:build": "IS_BUILD_DOCKER=1 npm run build",
+    "docker:dev": "WATCHPACK_POLLING=true next dev"
   },
   "dependencies": {
     "next": "15.5.9",

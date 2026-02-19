@@ -1,0 +1,19 @@
+services:
+  # Fumadocs (NextJS) app using app router running as a standalone mode build
+  weaponsforge.fumadocs:
+    container_name: weaponsforge-fumadocs
+    image: weaponsforge/fumadocs:prod
+    restart: always
+    build:
+      context: ./docsapp
+      dockerfile: Dockerfile
+      target: production
+    networks:
+      - weaponsforge-fumadocs-prod
+    ports:
+      - "3000:3000"
+
+networks:
+  weaponsforge-fumadocs-prod:
+    name: weaponsforge-fumadocs-prod
+    external: false
