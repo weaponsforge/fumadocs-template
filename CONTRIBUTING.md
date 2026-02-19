@@ -16,7 +16,7 @@ To ensure a smooth contribution process for everyone, please follow these guidel
 
 3. **Set Upstream Remote:** Add the original repository as an upstream remote to your local clone. This helps you to keep your fork up to date.
    ```sh
-   git remote add upstream https://github.com/weaponsforge/fumadocs-template.git
+   git remote add upstream https://github.com/weaponsforge/fumadocs-template-template.git
    ```
 
 ## Making Changes
@@ -27,7 +27,9 @@ To ensure a smooth contribution process for everyone, please follow these guidel
    ```
 
 2. **Add Your Content:** Make your changes or additions to the project.
-   - If you're adding new documentation (MDX) content, ensure it's placed in the correct directory (`/docsapp/content`) and follows the Markdown (MD) syntax. If you're adding new React components or utilities, ensure intuitive file, variables, and TypeScript naming conventions, and all updates pass the `"npm run lint"` script. Furthermore, ensure React best practices to continue promoting well-structured, optimized and easy-to-follow React components.
+   - If you're adding new documentation (MDX) content, ensure it's placed in the correct directory (`/docsapp/content`) and follows the Markdown (MD) syntax.
+   - If you're adding new React components or utilities, ensure intuitive file, variables, and TypeScript naming conventions. Furthermore, ensure React best practices to continue promoting well-structured, optimized and easy-to-follow React components.
+   - Before commiting your changes, format your code with `"npm run format"`, and ensure all updates pass the `"npm run lint"` script.
 
 3. **Commit Your Changes:** After making your changes, commit them to your branch. Use clear and concise commit messages to describe your updates.
    ```sh
