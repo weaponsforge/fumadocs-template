@@ -1,11 +1,11 @@
+import type { NextAuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+
 import {
   getAllowedEmails,
   getHostedDomain,
   getMultipleHostedDomains,
 } from "@/lib/utils";
-
-import type { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 
 const singleHostedDomain = getHostedDomain();
 
