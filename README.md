@@ -40,7 +40,11 @@ yarn dev
 
 Open http://localhost:3000 with your browser to see the result.
 
-### ⚡ Quickstart
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+## ⚡ Quickstart
 
 Using Docker
 
