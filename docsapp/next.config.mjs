@@ -21,7 +21,16 @@ const config = {
   ...(IS_BUILD_DOCKER && {
     // standalone build for docker production
     output: "standalone",
-  })
+  }),
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "**",
+      },
+    ],
+  },
 };
 
 export default withMDX(config);

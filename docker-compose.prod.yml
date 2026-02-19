@@ -3,6 +3,8 @@ services:
   weaponsforge.fumadocs:
     container_name: weaponsforge-fumadocs
     image: weaponsforge/fumadocs:prod
+    env_file:
+      - ./docsapp/.env.local
     restart: always
     build:
       context: ./docsapp

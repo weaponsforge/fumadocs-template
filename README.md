@@ -3,6 +3,8 @@
 This is a Next.js application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs).
 
+It features basic setup, configurations and tooling to standardize using Fumadocs as a template.
+
 ### 📋 Requirements
 
 1. NodeJS v24
@@ -12,7 +14,16 @@ This is a Next.js application generated with
    npm v11.6.1
    ```
 
-2. Docker (optional)
+2. Google OAuth2 Client (optional)
+   - This requires a Google Cloud Platform project configured with [OAuth2](https://developers.google.com/workspace/guides/configure-oauth-consent) settings and [credentials](https://developers.google.com/workspace/guides/manage-credentials).
+   - Read on the Google [Gmail](https://developers.google.com/gmail/api/guides), [SMTP and OAuth2 Setup](https://github.com/weaponsforge/email-sender?tab=readme-ov-file#using-the-oauth-20-playground) sections for more information.
+   - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
+
+   <br>
+
+   > Setup required only if you want to enable Google sign-in
+
+3. Docker (optional)
 
 ### 📖 Run development server
 
@@ -88,3 +99,13 @@ Create a `.env.local` file from the `.env.example` file.
 | --- | --- |
 | IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/nextapp/out` directory when running `"npm run build"` |
 | IS_BUILD_DOCKER | Flag to build the NextJS app for Docker in production using the standalone mode build. | `true`, builds and exports the NextJS app into a static build in the `/out` directory when running `"npm run build"` |
+| GOOGLE_CLIENT_ID | Google OAuth2 client ID linked with your Google Cloud Platform project. |
+| GOOGLE_CLIENT_SECRET | Google OAuth2 client secret associated with the `GOOGLE_CLIENT_ID` |
+| NEXTAUTH_SECRET | Your nextauth secret (any random string will do) |
+| NEXTAUTH_URL | Your root domain URL |
+| ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from all Google accounts.</quote> |
+| ALLOWED_EMAILS | Hard-coded list of allowed emails to sign-in with Google. |
+
+@weaponsforge<br>
+20251118<br>
+20260220
