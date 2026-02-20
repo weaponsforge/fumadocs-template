@@ -15,7 +15,7 @@ const config = {
   reactStrictMode: true,
   ...(IS_BUILD_STATIC && {
     // static export
-    output: "static",
+    output: "export",
     trailingSlash: true,
   }),
   ...(IS_BUILD_DOCKER && {
