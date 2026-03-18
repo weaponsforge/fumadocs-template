@@ -2,8 +2,20 @@
 
 Welcome to the **fumadocs-template** repository! We're excited to have you contribute to creating standards and patterns for using [Fumadocs](https://github.com/fuma-nama/fumadocs), or adding new features.
 
-
 To ensure a smooth contribution process for everyone, please follow these guidelines.
+
+> [!NOTE]
+>  **Before Submitting**
+>
+> Check if there are other similar [PRs](https://github.com/weaponsforge/fumadocs-template/pulls).
+>
+> **New Feature**
+>
+> Before submitting a new feature, please open a **Feature Request issue** that clearly explains the proposed functionality and the reasons behind it. Once the request has been reviewed and approved, you may proceed with submitting a pull request.
+>
+> **Bug Fixes**
+>
+> Provide a detailed description of the bug (with live demo if possible). OR open a bug report and link it in your PR.
 
 ## Getting Started
 
@@ -16,7 +28,7 @@ To ensure a smooth contribution process for everyone, please follow these guidel
 
 3. **Set Upstream Remote:** Add the original repository as an upstream remote to your local clone. This helps you to keep your fork up to date.
    ```sh
-   git remote add upstream https://github.com/weaponsforge/fumadocs-template-template.git
+   git remote add upstream https://github.com/weaponsforge/fumadocs-template.git
    ```
 
 ## Making Changes
@@ -66,6 +78,6 @@ To ensure a smooth contribution process for everyone, please follow these guidel
 
 3. **Working functionality:** For pull requests involving new features or major updates, ensure the changes are fully functional and optimized. Aim to keep PRs within **`~700` lines of code changes**, breaking them into smaller, self-contained parts when possible. PRs exceeding **`~1000+` lines** may be accepted when justified (e.g., major refactors or foundational features).
 
-4. **Respect:** Respect the structure and formatting of the existing project. Follow the standard Bione rules defined in its `docsapp/biome.json` file.
+4. **Respect:** Respect the structure and formatting of the existing project. Follow the standard Biome rules defined in its `docsapp/biome.json` file.
 
 Thank you for contributing to the **fumadocs-template** repository. Your efforts help in making a reusable template with tested and documented patterns for using [Fumadocs](https://github.com/fuma-nama/fumadocs).

@@ -5,6 +5,10 @@ This is a Next.js application generated with
 
 It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
 
+### Demo
+
+https://fumadocs-template-ten.vercel.app/
+
 ### 📋 Requirements
 
 #### 1. NodeJS v24
@@ -32,7 +36,7 @@ npm v11.6.1
 #### 1. Navigate to the `/docsapp` directory
 
 ```sh
-cd nextapp
+cd docsapp
 ```
 
 #### 2. Install dependencies.
@@ -130,8 +134,8 @@ Create a `.env.local` file from the `.env.example` file.
 | NEXTAUTH_URL | Your root domain URL |
 | ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from all Google accounts.</quote> |
 | ALLOWED_EMAILS | Hard-coded list of comma-separated emails allowed to sign-in with Google. |
-| IS_BUILD_DOCKER | If value is `1`, builds the NextJS app for Docker in production using the standalone mode build into the `/nextapp/.next/standalone` and `/nextapp/.next/static` directories. |
-| IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/nextapp/out` directory when running `"npm run build"`<br><br>⚠️ Fumadocs (or any Next.js) app that uses heavy React Server Components (RSC) and Next.js server features will fail to build as a static output. Te enable true static export, [adjust necessary settings](https://nextjs.org/docs/app/guides/static-exports) in the `next.config.mjs` file and the overall app before export. |
+| IS_BUILD_DOCKER | If value is `1`, builds the NextJS app for Docker in production using the standalone mode build into the `/docsapp/.next/standalone` and `/docsapp/.next/static` directories. |
+| IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/docsapp/out` directory when running `"npm run build"`<br><br>⚠️ Fumadocs (or any Next.js) app that uses heavy React Server Components (RSC) and Next.js server features will fail to build as a static output. Te enable true static export, [adjust necessary settings](https://nextjs.org/docs/app/guides/static-exports) in the `next.config.mjs` file and the overall app before export. |
 
 @weaponsforge<br>
 20251118<br>
