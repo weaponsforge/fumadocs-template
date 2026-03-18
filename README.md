@@ -5,7 +5,7 @@ This is a Next.js application generated with
 
 It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
 
-**Demo**
+### Demo
 
 https://fumadocs-template-ten.vercel.app/
 
