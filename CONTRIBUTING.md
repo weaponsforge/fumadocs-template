@@ -2,8 +2,20 @@
 
 Welcome to the **fumadocs-template** repository! We're excited to have you contribute to creating standards and patterns for using [Fumadocs](https://github.com/fuma-nama/fumadocs), or adding new features.
 
-
 To ensure a smooth contribution process for everyone, please follow these guidelines.
+
+> [!NOTE]
+>  **Before Submitting**
+>
+> Check if there are other similar [PRs](https://github.com/weaponsforge/fumadocs-template/pulls).
+>
+> **New Feature**
+>
+> Before submitting a new feature, please open a **Feature Request issue** that clearly explains the proposed functionality and the reasons behind it. Once the request has been reviewed and approved, you may proceed with submitting a pull request.
+>
+> **Bug Fixes**
+>
+> Provide a detailed description of the bug (with live demo if possible). OR open a bug report and link it in your PR.
 
 ## Getting Started
 
