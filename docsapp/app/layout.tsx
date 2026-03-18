@@ -1,6 +1,25 @@
 import "@/app/global.css";
 import { RootProvider } from "fumadocs-ui/provider/next";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
+import PwaClient from "@/app/components/pwaClient";
+
+export const metadata: Metadata = {
+  title: "Fumadocs Template",
+  manifest: "/manifest.webmanifest", // ← Generated at build time from manifest.ts
+  icons: {
+    icon: [
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  appleWebApp: {
+    title: "Fumadocs Template",
+  },
+};
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,6 +29,7 @@ export default function Layout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
+        <PwaClient />
         <RootProvider>{children}</RootProvider>
       </body>
     </html>
