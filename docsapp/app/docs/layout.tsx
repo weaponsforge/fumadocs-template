@@ -16,7 +16,7 @@ export default async function Layout({ children }: LayoutProps<"/docs">) {
           <>
             <Image
               src="/images/logo_01_64.png"
-              alt="ADM  Group"
+              alt="Fumdadocs Template"
               width={24}
               height={24}
               aria-hidden="true"

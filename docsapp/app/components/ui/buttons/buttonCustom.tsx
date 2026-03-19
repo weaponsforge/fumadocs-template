@@ -28,7 +28,6 @@ enum ButtonState {
 
 export function CustomButton(props: CustomButtonProps) {
   const [status, setStatus] = useState(ButtonState.ACTIVE);
-
   const { title = "", label = "", image, styles, callback } = props;
 
   const stylesContainer = cn(

@@ -132,8 +132,8 @@ Create a `.env.local` file from the `.env.example` file.
 | GOOGLE_CLIENT_SECRET | Google OAuth2 client secret associated with the `GOOGLE_CLIENT_ID` |
 | NEXTAUTH_SECRET | Your nextauth secret (any random string will do) |
 | NEXTAUTH_URL | Your root domain URL |
-| ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from all Google accounts.</quote> |
-| ALLOWED_EMAILS | Hard-coded list of comma-separated emails allowed to sign-in with Google. |
+| ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from all **Gmail domains**.</quote> |
+| ALLOWED_EMAILS | Hard-coded list of comma-separated emails allowed to sign-in with Google.<br><quote>Leave it blank or unset if you want to allow sign-in from all **Google accounts**.</quote> |
 | IS_BUILD_DOCKER | If value is `1`, builds the NextJS app for Docker in production using the standalone mode build into the `/docsapp/.next/standalone` and `/docsapp/.next/static` directories. |
 | IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/docsapp/out` directory when running `"npm run build"`<br><br>⚠️ Fumadocs (or any Next.js) app that uses heavy React Server Components (RSC) and Next.js server features will fail to build as a static output. Te enable true static export, [adjust necessary settings](https://nextjs.org/docs/app/guides/static-exports) in the `next.config.mjs` file and the overall app before export. |
 
