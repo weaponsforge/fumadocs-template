@@ -3,8 +3,8 @@ import Image from "next/image";
 import { baseOptions } from "@/lib/layout.shared";
 import { source } from "@/lib/source";
 
-export default function Layout({ children }: LayoutProps<"/docs">) {
-  const base = baseOptions();
+export default async function Layout({ children }: LayoutProps<"/docs">) {
+  const base = await baseOptions();
 
   return (
     <DocsLayout
@@ -16,7 +16,7 @@ export default function Layout({ children }: LayoutProps<"/docs">) {
           <>
             <Image
               src="/images/logo_01_64.png"
-              alt="ADM  Group"
+              alt="Fumdadocs Template"
               width={24}
               height={24}
               aria-hidden="true"

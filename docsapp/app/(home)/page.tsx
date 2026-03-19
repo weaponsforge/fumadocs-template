@@ -1,12 +1,10 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { GoogleSignInButton } from "@/app/components/auth/google/btnLogin";
 import { ButtonLink } from "@/app/components/ui/buttons/buttonLink";
+import { getAuthSession } from "@/lib/session";
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession();
 
   const renderButton = session ? (
     <ButtonLink
