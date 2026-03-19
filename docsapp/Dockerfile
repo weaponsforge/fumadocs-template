@@ -1,5 +1,5 @@
 FROM node:24.11.0-alpine AS base
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat git
 RUN mkdir -p /opt/client
 WORKDIR /opt/client
 RUN chown -R node:node /opt/client
@@ -26,7 +26,8 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY --chown=node:node . ./
 USER node
 EXPOSE 3000
-CMD ["npm", "run", "docker:dev"]
+CMD ["sh", "-c", "if [ \"$IS_WEBPACK\" = \"1\" ]; then npx next dev --webpack; else npm run docker:dev; fi"]
+# CMD ["npm", "run", "docker:dev"]
 
 # PRODUCTION CLIENT PROFILE (Standalone mode build)
 # https://hmos.dev/en/nextjs-docker-standalone-and-custom-server#2-standalone-mode-build

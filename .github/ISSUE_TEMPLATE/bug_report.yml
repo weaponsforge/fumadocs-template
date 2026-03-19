@@ -34,7 +34,7 @@ body:
   - type: textarea
     attributes:
       label: Provide environment information
-      description: Please run `next info` in the root directory of your project and paste the results.
+      description: Please run `npx next info` in the root directory of your project and paste the results.
       render: bash
       placeholder: |
         Operating System:
@@ -68,6 +68,7 @@ body:
         - 'Fumadocs UI'
         - 'CSS Styling'
         - 'Authentication'
+        - 'Docker'
         - 'Others'
     validations:
       required: true
