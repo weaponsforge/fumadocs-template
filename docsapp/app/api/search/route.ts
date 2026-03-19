@@ -1,14 +1,28 @@
 import { createFromSource } from "fumadocs-core/search/server";
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import { source } from "@/lib/source";
+import { authOptions } from "../auth/[...nextauth]/authOptions";
 
-const IS_BUILD_STATIC = process.env.IS_BUILD_STATIC === "1";
-const revalidate = !IS_BUILD_STATIC ? false : 0;
+const IS_BUILD_STATIC = process.env.IS_BUILD_STATIC === "true";
 
-const { staticGET, GET: ssrGET } = createFromSource(source, {
-  // https://docs.orama.com/docs/orama-js/supported-languages
-  language: "english",
-});
+export async function GET(req: Request) {
+  const session = await getServerSession(authOptions);
 
-const GET = IS_BUILD_STATIC ? staticGET : ssrGET;
+  if (!session) {
+    return NextResponse.json("Unauthorized", { status: 401 });
+  }
 
-export { GET, revalidate };
+  const { staticGET, GET: ssrGET } = createFromSource(source, {
+    // https://docs.orama.com/docs/orama-js/supported-languages
+    language: "english",
+  });
+
+  if (IS_BUILD_STATIC) {
+    // static search (used when generating static JSON)
+    return staticGET();
+  } else {
+    // dynamic server-side search
+    return ssrGET(req);
+  }
+}
