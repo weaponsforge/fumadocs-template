@@ -1,28 +1,28 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { getAuthSession } from "@/lib/session";
 
 /**
  * Serves auth-protected media assets in protected (private) page routes
  * @param req - Next request
- * @param param1 - Route path or parameters
+ * @param context - Route path or parameters
  * @returns NextResponse
  */
 // biome-ignore lint/suspicious/noExplicitAny: Needed for dynamic route params typing
 export async function GET(_: Request, context?: any) {
-  const session = await getServerSession(authOptions);
-
+  const session = await getAuthSession();
   const PROTECTED_FILE_PATH = "protected";
   let filePathArray = ["images", "default.png"];
 
-  if (Array.isArray(context?.params?.path)) {
-    filePathArray = context?.params?.path;
-  }
-
   if (!session) {
     return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  const ctxParams = await context.params;
+
+  if (Array.isArray(ctxParams?.path)) {
+    filePathArray = ctxParams?.path;
   }
 
   const filePath = join(process.cwd(), PROTECTED_FILE_PATH, ...filePathArray);

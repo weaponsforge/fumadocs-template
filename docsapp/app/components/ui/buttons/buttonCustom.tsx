@@ -44,7 +44,7 @@ export function CustomButton(props: CustomButtonProps) {
   const stylesTitle = cn("dark:text-black", !image && "m-auto", styles?.title);
 
   const stylesLabel = cn(
-    "text-[10px] text-gray-500 truncate max-w-[180px]",
+    "text-[10px] text-gray-500 truncate max-w-[170px]",
     !label && "hidden",
     styles?.label,
   );
@@ -66,7 +66,7 @@ export function CustomButton(props: CustomButtonProps) {
           src={image}
           alt="user"
           width={32}
-          height={24}
+          height={32}
           aria-hidden="true"
           className="rounded-full object-cover"
         />

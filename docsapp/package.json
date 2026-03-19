@@ -1,6 +1,6 @@
 {
   "name": "fumadocs-template",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -13,24 +13,25 @@
     "docker:dev": "WATCHPACK_POLLING=true next dev"
   },
   "dependencies": {
-    "fumadocs-core": "15.8.3",
-    "fumadocs-mdx": "12.0.2",
-    "fumadocs-ui": "15.8.3",
-    "lucide-react": "^0.544.0",
-    "next": "15.5.9",
+    "fumadocs-core": "16.7.0",
+    "fumadocs-mdx": "14.2.11",
+    "fumadocs-ui": "16.7.0",
+    "lucide-react": "^0.577.0",
+    "next": "16.2.0",
     "next-auth": "^4.24.13",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.5",
-    "@tailwindcss/postcss": "^4.1.14",
+    "@biomejs/biome": "2.4.8",
+    "@tailwindcss/postcss": "^4.2.1",
     "@types/mdx": "^2.0.13",
-    "@types/node": "24.6.2",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.14",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
   }
 }

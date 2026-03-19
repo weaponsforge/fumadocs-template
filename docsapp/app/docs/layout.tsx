@@ -3,8 +3,8 @@ import Image from "next/image";
 import { baseOptions } from "@/lib/layout.shared";
 import { source } from "@/lib/source";
 
-export default function Layout({ children }: LayoutProps<"/docs">) {
-  const base = baseOptions();
+export default async function Layout({ children }: LayoutProps<"/docs">) {
+  const base = await baseOptions();
 
   return (
     <DocsLayout

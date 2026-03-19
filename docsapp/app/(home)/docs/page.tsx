@@ -36,7 +36,7 @@ const docsTopics = [
 
 export default function DocsPage() {
   return (
-    <main className="container flex flex-col flex-1 justify-center items-center py-16 text-center z-2">
+    <main className="container flex flex-col flex-1 justify-center items-center py-16 text-center z-2 m-auto">
       <h1 className="mb-4 text-3xl font-semibold md:text-4xl">
         Getting Started
       </h1>
