@@ -1,9 +1,8 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { SignOutButton } from "@/app/components/auth/btnSignout";
+import { getAuthSession } from "@/lib/session";
 
 export default async function SignOutLink() {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession();
 
   if (!session) {
     return null;
