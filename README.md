@@ -25,11 +25,9 @@ npm v11.6.1
 - Read on the Google [Gmail](https://developers.google.com/gmail/api/guides), [SMTP and OAuth2 Setup](https://github.com/weaponsforge/email-sender?tab=readme-ov-file#using-the-oauth-20-playground) sections for more information.
 - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
 
-<br>
-
 > 💡 **INFO**: Setup required only if you want to enable Google sign-in
 
-3. Docker (optional)
+#### 3. Docker (optional)
 
 ### 📖 Run development server
 

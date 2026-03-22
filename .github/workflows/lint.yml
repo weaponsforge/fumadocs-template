@@ -20,8 +20,9 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install Dependencies and Lint
+      - name: Install Dependencies, Lint, check Types
         run: |
           cd docsapp
           npm ci
           npm run lint
+          npm run types:check
