@@ -9,7 +9,7 @@ on:
 
 jobs:
   lint-client:
-    name: Lint Client
+    name: Lint App
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository

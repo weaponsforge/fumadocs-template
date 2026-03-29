@@ -1,10 +1,11 @@
-import Link from "next/link";
-import { GoogleSignInButton } from "@/app/components/auth/google/btnLogin";
-import { ButtonLink } from "@/app/components/ui/buttons/buttonLink";
-import { getAuthSession } from "@/lib/session";
+import Link from 'next/link'
+
+import { GoogleSignInButton } from '@/app/components/auth/google/btnLogin'
+import { ButtonLink } from '@/app/components/ui/buttons/buttonLink'
+import { getAuthSession } from '@/lib/session'
 
 export default async function HomePage() {
-  const session = await getAuthSession();
+  const session = await getAuthSession()
 
   const renderButton = session ? (
     <ButtonLink
@@ -22,25 +23,25 @@ export default async function HomePage() {
     <div className="pt-4">
       <GoogleSignInButton />
     </div>
-  );
+  )
 
   return (
     <main className="min-h-100 flex flex-col pt-8">
       <div className="max-w-screen-md w-full p-4 mx-auto">
         <h1 className="mb-4 text-2xl font-bold">Hello World</h1>
         <p className="text-fd-muted-foreground">
-          You can open{" "}
+          You can open{' '}
           <Link
             href="/docs"
             className="text-fd-foreground font-semibold underline"
           >
             /docs
-          </Link>{" "}
+          </Link>{' '}
           and see the documentation.
         </p>
 
         {renderButton}
       </div>
     </main>
-  );
+  )
 }

@@ -1,7 +1,9 @@
-import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import Image from "next/image";
-import SignOutLink from "@/app/components/auth/linkSignout";
-import { getAuthSession } from "@/lib/session";
+import Image from 'next/image'
+
+import SignOutLink from '@/app/components/auth/linkSignout'
+import { getAuthSession } from '@/lib/session'
+
+import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 
 /**
  * Shared layout configurations
@@ -11,7 +13,7 @@ import { getAuthSession } from "@/lib/session";
  * Docs Layout: app/docs/layout.tsx
  */
 export async function baseOptions(): Promise<BaseLayoutProps> {
-  const session = await getAuthSession();
+  const session = await getAuthSession()
 
   return {
     nav: {
@@ -32,11 +34,11 @@ export async function baseOptions(): Promise<BaseLayoutProps> {
     ...(session && {
       links: [
         {
-          type: "custom",
+          type: 'custom',
           children: <SignOutLink />,
           secondary: true,
         },
       ],
     }),
-  };
+  }
 }
