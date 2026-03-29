@@ -14,10 +14,10 @@
     "docker:dev": "WATCHPACK_POLLING=true next dev"
   },
   "dependencies": {
-    "fumadocs-core": "16.7.4",
+    "fumadocs-core": "16.7.7",
     "fumadocs-mdx": "14.2.11",
-    "fumadocs-ui": "16.7.4",
-    "lucide-react": "^0.577.0",
+    "fumadocs-ui": "16.7.7",
+    "lucide-react": "^1.7.0",
     "next": "16.2.1",
     "next-auth": "^4.24.13",
     "react": "^19.2.4",
