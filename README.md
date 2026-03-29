@@ -32,7 +32,7 @@ npm v11.6.1
 
 #### 3. Docker (optional)
 
-### 📖 Run development server
+## 📖 Run development server
 
 #### 1. Navigate to the `/docsapp` directory
 
@@ -61,8 +61,6 @@ Open http://localhost:3000 with your browser to see the result.
 
 <br>
 
-
-
 ## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
@@ -70,6 +68,9 @@ We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for gu
 <br>
 
 ## ⚡ Quickstart
+
+> [!TIP]
+> Set `IS_WEBPACK=1` and `WATCHPACK_POLLING=true` to enable hot reloading in development mode when running in Docker on Windows, as Turbopack is currently unreliable in this setup.
 
 Using Docker
 
@@ -138,6 +139,7 @@ Create a `.env.local` file from the `.env.example` file.
 | IS_BUILD_DOCKER | If value is `1`, builds the NextJS app for Docker in production using the standalone mode build into the `/docsapp/.next/standalone` and `/docsapp/.next/static` directories. |
 | IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/docsapp/out` directory when running `"npm run build"`<br><br>⚠️ Fumadocs (or any Next.js) app that uses heavy React Server Components (RSC) and Next.js server features will fail to build as a static output. Te enable true static export, [adjust necessary settings](https://nextjs.org/docs/app/guides/static-exports) in the `next.config.mjs` file and the overall app before export. |
 | IS_WEBPACK | Set to `1` to run the app in development mode using **Webpack**. <br><br>⭐ **IMPORTANT**: When running the app via **Docker** on Windows OS (`docker compose up`), this must be set to `1` to enable hot reload.|
+| WATCHPACK_POLLING | Set to `true` to enable Webpack-based hot reloading when running the app in Docker on Windows. Required because Turbopack hot reload is currently unreliable in this setup (Docker + Windows). |
 
 @weaponsforge<br>
 20251118<br>

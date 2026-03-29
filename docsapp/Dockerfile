@@ -26,7 +26,7 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY --chown=node:node . ./
 USER node
 EXPOSE 3000
-CMD ["sh", "-c", "if [ \"$IS_WEBPACK\" = \"1\" ]; then npx next dev --webpack; else npm run docker:dev; fi"]
+CMD ["sh", "-c", "if [ \"$IS_WEBPACK\" = \"1\" ]; then npm run docker:webpack; else npm run dev; fi"]
 # CMD ["npm", "run", "docker:dev"]
 
 # PRODUCTION CLIENT PROFILE (Standalone mode build)
