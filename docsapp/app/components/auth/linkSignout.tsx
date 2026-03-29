@@ -1,16 +1,16 @@
-import { SignOutButton } from "@/app/components/auth/btnSignout";
-import { getAuthSession } from "@/lib/session";
+import { SignOutButton } from '@/app/components/auth/btnSignout'
+import { getAuthSession } from '@/lib/session'
 
 export default async function SignOutLink() {
-  const session = await getAuthSession();
+  const session = await getAuthSession()
 
   if (!session) {
-    return null;
+    return null
   }
 
-  const user = session?.user;
-  const email = user?.email ?? "-";
-  const picture = user?.image ?? "-";
+  const user = session?.user
+  const email = user?.email ?? '-'
+  const picture = user?.image ?? '-'
 
   return (
     <SignOutButton
@@ -18,5 +18,5 @@ export default async function SignOutLink() {
       label={email as string}
       image={picture as string}
     />
-  );
+  )
 }

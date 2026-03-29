@@ -1,9 +1,10 @@
-"use client";
+'use client'
 
-import { Loader } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
-import { cn } from "@/lib/cn";
+import { Loader } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
+
+import { cn } from '@/lib/cn'
 
 interface StylesInterface {
   container?: string;
@@ -20,38 +21,38 @@ export interface CustomButtonProps {
   callback?: () => void;
 }
 
-enum ButtonState {
-  ACTIVE = "active",
-  LOADING = "loading",
-  DISABLED = "disabled",
+const ButtonState = {
+  ACTIVE: 'active',
+  LOADING: 'loading',
+  DISABLED: 'disabled',
 }
 
 export function CustomButton(props: CustomButtonProps) {
-  const [status, setStatus] = useState(ButtonState.ACTIVE);
-  const { title = "", label = "", image, styles, callback } = props;
+  const [status, setStatus] = useState(ButtonState.ACTIVE)
+  const { title = '', label = '', image, styles, callback } = props
 
   const stylesContainer = cn(
-    "flex gap-2 items-center px-3 py-2 w-full rounded-full border text-xs cursor-pointer bg-white dark:bg-stone-200",
+    'flex gap-2 items-center px-3 py-2 w-full rounded-full border text-xs cursor-pointer bg-white dark:bg-stone-200',
     styles?.container,
-  );
+  )
 
   const stylesTextContainer = cn(
-    "flex flex-col items-start w-full",
-    !label && "justify-center",
-  );
+    'flex flex-col items-start w-full',
+    !label && 'justify-center',
+  )
 
-  const stylesTitle = cn("dark:text-black", !image && "m-auto", styles?.title);
+  const stylesTitle = cn('dark:text-black', !image && 'm-auto', styles?.title)
 
   const stylesLabel = cn(
-    "text-[10px] text-gray-500 truncate max-w-[170px]",
-    !label && "hidden",
+    'text-[10px] text-gray-500 truncate max-w-[170px]',
+    !label && 'hidden',
     styles?.label,
-  );
+  )
 
   const handleButtonClick = () => {
-    setStatus(ButtonState.LOADING);
-    callback?.();
-  };
+    setStatus(ButtonState.LOADING)
+    callback?.()
+  }
 
   return (
     <button
@@ -83,5 +84,5 @@ export function CustomButton(props: CustomButtonProps) {
         {label && <div className={stylesLabel}>{label}</div>}
       </div>
     </button>
-  );
+  )
 }
