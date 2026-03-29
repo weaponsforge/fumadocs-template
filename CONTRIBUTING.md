@@ -41,7 +41,7 @@ To ensure a smooth contribution process for everyone, please follow these guidel
 2. **Add Your Content:** Make your changes or additions to the project.
    - If you're adding new documentation (MDX) content, ensure it's placed in the correct directory (`/docsapp/content`) and follows the Markdown (MD) syntax.
    - If you're adding new React components or utilities, ensure intuitive file, variables, and TypeScript naming conventions. Furthermore, ensure React best practices to continue promoting well-structured, optimized and easy-to-follow React components.
-   - Before commiting your changes, format your code with `"npm run lint:fix"`, and ensure all updates pass the `"npm run lint"` script.
+   - Before commiting your changes, format your code with `"npm run lint:fix"`, and ensure all updates pass the `"npm run lint"` and `"npm run types:check"` scripts.
 
 3. **Commit Your Changes:** After making your changes, commit them to your branch. Use clear and concise commit messages to describe your updates.
    ```sh

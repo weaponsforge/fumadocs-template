@@ -21,22 +21,34 @@ const eslintConfig = defineConfig([
       import: importPlugin,
     },
     rules: {
+      'comma-dangle': ['error', 'always-multiline'],
+      'eol-last': ['error', 'always'],
       'indent': ['error', 2],
+      'jsx-quotes': ['error', 'prefer-double'],
       'linebreak-style': ['error', 'unix'],
+      'object-curly-spacing': ['error', 'always'],
       'quotes': ['error', 'single'],
       'semi': ['error', 'never'],
-      'no-unused-vars': 'error',
-      'no-undef': 'error',
       'no-console': ['error', { allow: ['error'] }],
+      'no-trailing-spaces': 'error',
+      'no-undef': 'off',
+      'no-unused-vars': 'error',
       'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          'argsIgnorePattern': '^_',
+          'varsIgnorePattern': '^_',
+        },
+      ],
       'no-restricted-imports': [
         'error',
         { 'patterns':
           [
             '@/features/*',
-            './features/*'
-          ]
-        }
+            './features/*',
+          ],
+        },
       ],
       'import/order': [
         'error',

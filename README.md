@@ -24,6 +24,9 @@ npm v11.6.1
 - This requires a Google Cloud Platform project configured with [OAuth2](https://developers.google.com/workspace/guides/configure-oauth-consent) settings and [credentials](https://developers.google.com/workspace/guides/manage-credentials).
 - Read on the Google [Gmail](https://developers.google.com/gmail/api/guides), [SMTP and OAuth2 Setup](https://github.com/weaponsforge/email-sender?tab=readme-ov-file#using-the-oauth-20-playground) sections for more information.
 - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
+- Add the following in your Google Client ID's **Authorized redirect URIs**:
+   - https://<YOUR_DEPLOYED_APP_ROOT_DOMAIN>/api/auth/callback/google<br>
+   - eg., `http://localhost:3000/api/auth/callback/google` (when working in local development)
 
 > 💡 **INFO**: Setup required only if you want to enable Google sign-in
 
