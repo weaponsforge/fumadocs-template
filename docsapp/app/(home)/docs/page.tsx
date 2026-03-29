@@ -1,38 +1,39 @@
-import { BookLock, FileUser, MapPinPlus, Shield, Swords } from "lucide-react";
-import Link, { type LinkProps } from "next/link";
+import { BookLock, FileUser, MapPinPlus, Shield, Swords } from 'lucide-react'
+import Link, { type LinkProps } from 'next/link'
+import { ReactNode } from 'react'
 
 const docsTopics = [
   {
-    name: "Characters",
-    description: "MU Online character classes",
+    name: 'Characters',
+    description: 'MU Online character classes',
     icon: <FileUser className="size-full" />,
-    href: "/docs/characters",
+    href: '/docs/characters',
   },
   {
-    name: "Weapons",
-    description: "MU Online weapons",
+    name: 'Weapons',
+    description: 'MU Online weapons',
     icon: <Swords className="size-full" />,
-    href: "/docs/weapons",
+    href: '/docs/weapons',
   },
   {
-    name: "Armor Sets",
-    description: "MU Online armors sets",
+    name: 'Armor Sets',
+    description: 'MU Online armors sets',
     icon: <Shield className="size-full" />,
-    href: "/docs/armor",
+    href: '/docs/armor',
   },
   {
-    name: "Maps",
-    description: "MU Online maps",
+    name: 'Maps',
+    description: 'MU Online maps',
     icon: <MapPinPlus className="size-full" />,
-    href: "/docs/maps",
+    href: '/docs/maps',
   },
   {
-    name: "Secrets",
-    description: "MU Online secrets",
+    name: 'Secrets',
+    description: 'MU Online secrets',
     icon: <BookLock className="size-full" />,
-    href: "/docs/secrets",
+    href: '/docs/secrets',
   },
-];
+]
 
 export default function DocsPage() {
   return (
@@ -55,21 +56,21 @@ export default function DocsPage() {
         ))}
       </div>
     </main>
-  );
+  )
 }
 
-function Icon({ children }: { children: React.ReactNode }) {
+function Icon({ children }: { children: ReactNode }) {
   return (
     <div className="mb-2 size-8 rounded-lg border p-1 text-fd-muted-foreground bg-fd-muted shadow-md">
       {children}
     </div>
-  );
+  )
 }
 
-function Item(props: LinkProps & { children: React.ReactNode }) {
+function Item(props: LinkProps & { children: ReactNode }) {
   return (
     <Link {...props} className="bg-fd-card rounded-2xl border p-4 shadow-lg">
       {props.children}
     </Link>
-  );
+  )
 }

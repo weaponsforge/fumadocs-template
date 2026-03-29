@@ -1,10 +1,11 @@
-import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import Image from "next/image";
-import { baseOptions } from "@/lib/layout.shared";
-import { source } from "@/lib/source";
+import { DocsLayout } from 'fumadocs-ui/layouts/docs'
+import Image from 'next/image'
 
-export default async function Layout({ children }: LayoutProps<"/docs">) {
-  const base = await baseOptions();
+import { baseOptions } from '@/lib/layout.shared'
+import { source } from '@/lib/source'
+
+export default async function Layout({ children }: LayoutProps<'/docs'>) {
+  const base = await baseOptions()
 
   return (
     <DocsLayout
@@ -31,5 +32,5 @@ export default async function Layout({ children }: LayoutProps<"/docs">) {
     >
       {children}
     </DocsLayout>
-  );
+  )
 }
