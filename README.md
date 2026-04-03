@@ -1,9 +1,11 @@
 # fumadocs-template
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+This is a Next.js (App Router) application generated with
+[Create Fumadocs](https://github.com/fuma-nama/fumadocs) using the **Next.js: Fumadocs MDX** option.
 
 It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
+
+> Next application code lives inside the `/src` directory.
 
 ### Demo
 
@@ -28,7 +30,9 @@ npm v11.6.1
    - https://<YOUR_DEPLOYED_APP_ROOT_DOMAIN>/api/auth/callback/google<br>
    - eg., `http://localhost:3000/api/auth/callback/google` (when working in local development)
 
-> 💡 **INFO**: Setup required only if you want to enable Google sign-in
+> [!TIP]
+> Setup required only if you want to enable Google sign-in<br>
+> To allow unrestricted access on all routes, set `matcher: []` in the `/docsapp/src/proxy.ts` file.
 
 #### 3. Docker (optional)
 
@@ -140,6 +144,10 @@ Create a `.env.local` file from the `.env.example` file.
 | IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/docsapp/out` directory when running `"npm run build"`<br><br>⚠️ Fumadocs (or any Next.js) app that uses heavy React Server Components (RSC) and Next.js server features will fail to build as a static output. Te enable true static export, [adjust necessary settings](https://nextjs.org/docs/app/guides/static-exports) in the `next.config.mjs` file and the overall app before export. |
 | IS_WEBPACK | Set to `1` to run the app in development mode using **Webpack**. <br><br>⭐ **IMPORTANT**: When running the app via **Docker** on Windows OS (`docker compose up`), this must be set to `1` to enable hot reload.|
 | WATCHPACK_POLLING | Set to `true` to enable Webpack-based hot reloading when running the app in Docker on Windows. Required because Turbopack hot reload is currently unreliable in this setup (Docker + Windows). |
+| APP_NAME | Name of your Fumadocs documentation app. Defaults to `"Fumadocs Template"` |
+| GH_USERNAME | Your GitHub username |
+| GH_REPOSITORY | GitHub repository containing this documentation app |
+| GH_REPO_DEFAULT_BRANCH | Default branch of the `GH_REPOSITORY`. Defaults to `"main"` |
 
 @weaponsforge<br>
 20251118<br>
