@@ -1,15 +1,15 @@
 import { notFound } from 'next/navigation'
 
-import { createRelativeLink } from 'fumadocs-ui/mdx'
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page'
+} from 'fumadocs-ui/layouts/docs/page'
+import { createRelativeLink } from 'fumadocs-ui/mdx'
 
+import { getMDXComponents } from '@/components/mdx'
 import { getPageImage, source } from '@/lib/source'
-import { getMDXComponents } from '@/mdx-components'
 
 import type { Metadata } from 'next'
 

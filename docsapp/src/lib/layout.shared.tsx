@@ -3,6 +3,9 @@ import Image from 'next/image'
 import SignOutLink from '@/components/auth/linkSignout'
 import { getAuthSession } from '@/lib/session'
 
+import { appName } from './constants'
+import { gitConfig } from './constants'
+
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 
 /**
@@ -15,18 +18,22 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 export async function baseOptions(): Promise<BaseLayoutProps> {
   const session = await getAuthSession()
 
+  const isGitHub = process.env.GH_USERNAME && process.env.GH_REPOSITORY
+  const githubRepoUrl = isGitHub ? `${gitConfig.repo}` : ''
+
   return {
+    githubUrl: githubRepoUrl,
     nav: {
       title: (
         <>
           <Image
             src="/images/logo_01_64.png"
-            alt="MU Online"
+            alt={`${appName}`}
             width={24}
             height={24}
             aria-hidden="true"
           />
-          MU Online
+          {appName}
         </>
       ),
     },

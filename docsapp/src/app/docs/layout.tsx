@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import { DocsLayout } from 'fumadocs-ui/layouts/docs'
 
+import { appName } from '@/lib/constants'
 import { baseOptions } from '@/lib/layout.shared'
 import { source } from '@/lib/source'
 
@@ -25,7 +26,7 @@ export default async function Layout({ children }: LayoutProps<'/docs'>) {
             />
 
             <div className="font-medium in-[.uwu]:hidden max-md:hidden">
-              MU Online
+              {appName}
             </div>
           </>
         ),

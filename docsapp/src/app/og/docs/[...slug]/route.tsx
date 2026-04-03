@@ -3,6 +3,7 @@ import { ImageResponse } from 'next/og'
 
 import { generate as DefaultImage } from 'fumadocs-ui/og'
 
+import { appName } from '@/lib/constants'
 import { getPageImage, source } from '@/lib/source'
 
 export const revalidate = false
@@ -19,7 +20,7 @@ export async function GET(
     <DefaultImage
       title={page.data.title}
       description={page.data.description}
-      site="My App"
+      site={appName}
     />,
     {
       width: 1200,

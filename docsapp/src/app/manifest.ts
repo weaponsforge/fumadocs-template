@@ -1,8 +1,10 @@
+import { appName } from '@/lib/constants'
+
 import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Fumadocs Template',
+    name: appName,
     short_name: 'Fumadocs',
     description: 'Fumadocs documentation website demo',
     start_url: '/',
