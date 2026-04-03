@@ -10,6 +10,7 @@
 # test & build
 /coverage
 /.next/
+/.source/
 /out/
 /build
 *.tsbuildinfo

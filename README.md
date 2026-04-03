@@ -1,9 +1,11 @@
 # fumadocs-template
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+This is a Next.js (App Router) application generated with
+[Create Fumadocs](https://github.com/fuma-nama/fumadocs) using the **Next.js: Fumadocs MDX** option.
 
 It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
+
+> Next application code lives inside the `/src` directory.
 
 ### Demo
 
