@@ -4,5 +4,6 @@ import { baseOptions } from '@/lib/layout.shared'
 
 export default async function Layout({ children }: LayoutProps<'/'>) {
   const base = await baseOptions()
+
   return <HomeLayout {...base}>{children}</HomeLayout>
 }

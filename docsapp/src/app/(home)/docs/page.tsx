@@ -1,6 +1,8 @@
-import { BookLock, FileUser, MapPinPlus, Shield, Swords } from 'lucide-react'
-import Link, { type LinkProps } from 'next/link'
 import { ReactNode } from 'react'
+
+import Link, { type LinkProps } from 'next/link'
+
+import { BookLock, FileUser, MapPinPlus, Shield, Swords } from 'lucide-react'
 
 const docsTopics = [
   {

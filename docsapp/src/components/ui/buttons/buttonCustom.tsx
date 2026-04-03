@@ -1,8 +1,10 @@
 'use client'
 
-import { Loader } from 'lucide-react'
-import Image from 'next/image'
 import { useState } from 'react'
+
+import Image from 'next/image'
+
+import { Loader } from 'lucide-react'
 
 import { cn } from '@/lib/cn'
 

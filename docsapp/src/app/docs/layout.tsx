@@ -1,5 +1,6 @@
-import { DocsLayout } from 'fumadocs-ui/layouts/docs'
 import Image from 'next/image'
+
+import { DocsLayout } from 'fumadocs-ui/layouts/docs'
 
 import { baseOptions } from '@/lib/layout.shared'
 import { source } from '@/lib/source'

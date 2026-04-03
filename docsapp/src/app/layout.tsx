@@ -1,6 +1,7 @@
 import './global.css'
-import { RootProvider } from 'fumadocs-ui/provider/next'
 import { Inter } from 'next/font/google'
+
+import { RootProvider } from 'fumadocs-ui/provider/next'
 
 import PwaClient from '@/components/pwaClient'
 

@@ -32,6 +32,7 @@ export async function GET(req: Request) {
 
   const filtered = results.filter((item) => {
     const url = typeof item.url === 'string' ? item.url : ''
+
     return !PRIVATE_ROUTES.some((prefix) => url.startsWith(prefix))
   })
 
