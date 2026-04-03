@@ -1,9 +1,3 @@
-import { config as privateRoutes } from '@/proxy'
-
-export const PRIVATE_ROUTES = privateRoutes.matcher.map((item) =>
-  item.replace('/:path*', ''),
-)
-
 export const appName = process.env.APP_NAME
 export const docsRoute = '/docs'
 export const docsImageRoute = '/og/docs'
