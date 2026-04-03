@@ -16,8 +16,13 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./*"],
-      "collections/*": [".source/*"]
+      "@/*": ["./src/*"],
+      "@/api*": ["./src/app/api/*"],
+      "@/components*": ["./src/components/*"],
+      "@/hooks*": ["./src/hooks/*"],
+      "@/lib*": ["./src/lib/*"],
+      "@/.source": ["./.source/index.ts"],
+      "collections/*": [".source/*"],
     },
     "plugins": [
       {

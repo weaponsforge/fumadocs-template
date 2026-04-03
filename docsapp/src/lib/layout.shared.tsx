@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import SignOutLink from '@/app/components/auth/linkSignout'
+import SignOutLink from '@/components/auth/linkSignout'
 import { getAuthSession } from '@/lib/session'
 
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'

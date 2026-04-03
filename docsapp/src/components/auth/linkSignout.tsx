@@ -1,4 +1,4 @@
-import { SignOutButton } from '@/app/components/auth/btnSignout'
+import { SignOutButton } from '@/components/auth/btnSignout'
 import { getAuthSession } from '@/lib/session'
 
 export default async function SignOutLink() {
