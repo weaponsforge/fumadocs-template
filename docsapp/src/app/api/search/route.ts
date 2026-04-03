@@ -1,7 +1,7 @@
 import { createFromSource } from 'fumadocs-core/search/server'
 
-import { PRIVATE_ROUTES } from '@/lib/constants'
 import { getAuthSession } from '@/lib/session'
+import { PRIVATE_ROUTES } from '@/lib/shared'
 import { source } from '@/lib/source'
 
 const IS_BUILD_STATIC = process.env.IS_BUILD_STATIC === '1'
