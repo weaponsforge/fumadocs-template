@@ -23,6 +23,7 @@ const eslintConfig = defineConfig([
     rules: {
       'comma-dangle': ['error', 'always-multiline'],
       'eol-last': ['error', 'always'],
+      'import/no-commonjs': 'error',
       'indent': ['error', 2],
       'jsx-quotes': ['error', 'prefer-double'],
       'linebreak-style': ['error', 'unix'],
@@ -30,10 +31,16 @@ const eslintConfig = defineConfig([
       'quotes': ['error', 'single'],
       'semi': ['error', 'never'],
       'no-console': ['error', { allow: ['error'] }],
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
       'no-trailing-spaces': 'error',
       'no-undef': 'off',
-      'no-unused-vars': 'error',
+      'no-unused-vars': 'off',
+      'padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: '*', next: 'return' },
+      ],
       'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-require-imports': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -43,11 +50,8 @@ const eslintConfig = defineConfig([
       ],
       'no-restricted-imports': [
         'error',
-        { 'patterns':
-          [
-            '@/features/*',
-            './features/*',
-          ],
+        {
+          'patterns': ['@/features/*', './features/*'],
         },
       ],
       'import/order': [
@@ -77,6 +81,7 @@ const eslintConfig = defineConfig([
               position: 'after',
             },
           ],
+          pathGroupsExcludedImportTypes: ['react', 'next'],
           'newlines-between': 'always',
           alphabetize: {
             order: 'asc',
