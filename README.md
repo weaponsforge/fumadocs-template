@@ -30,7 +30,9 @@ npm v11.6.1
    - https://<YOUR_DEPLOYED_APP_ROOT_DOMAIN>/api/auth/callback/google<br>
    - eg., `http://localhost:3000/api/auth/callback/google` (when working in local development)
 
-> 💡 **INFO**: Setup required only if you want to enable Google sign-in
+> [!TIP]
+> Setup required only if you want to enable Google sign-in<br>
+> To allow unrestricted access on all routes, set `matcher: []` in the `/docsapp/src/proxy.ts` file.
 
 #### 3. Docker (optional)
 
