@@ -78,6 +78,6 @@ To ensure a smooth contribution process for everyone, please follow these guidel
 
 3. **Working functionality:** For pull requests involving new features or major updates, ensure the changes are fully functional and optimized. Aim to keep PRs within **`~700` lines of code changes**, breaking them into smaller, self-contained parts when possible. PRs exceeding **`~1000+` lines** may be accepted when justified (e.g., major refactors or foundational features).
 
-4. **Respect:** Respect the structure and formatting of the existing project. Follow the standard Biome rules defined in its `docsapp/biome.json` file.
+4. **Respect:** Respect the structure and formatting of the existing project. Follow the standard ESLint rules defined in its `docsapp/eslint.config.mjs` file.
 
 Thank you for contributing to the **fumadocs-template** repository. Your efforts help in making a reusable template with tested and documented patterns for using [Fumadocs](https://github.com/fuma-nama/fumadocs).
