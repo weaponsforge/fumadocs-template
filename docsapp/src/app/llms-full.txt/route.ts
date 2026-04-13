@@ -1,5 +1,4 @@
 import { getAuthSession } from '@/lib/session'
-import { PRIVATE_ROUTES } from '@/lib/shared'
 import { getLLMText, publicSource, source } from '@/lib/source'
 
 export const revalidate = false
@@ -9,8 +8,8 @@ export async function GET() {
   let scan
 
   if (!session) {
-    scan = publicSource.getPages()
-      .filter(item => PRIVATE_ROUTES.every(route => !item.url.includes(route)))
+    scan = publicSource
+      .getPages()
       .map(getLLMText)
   } else {
     scan = source.getPages().map(getLLMText)

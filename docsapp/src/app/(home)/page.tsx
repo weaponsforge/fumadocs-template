@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
-import { GoogleSignInButton } from '@/components/auth/google/btnLogin'
+import { GoogleSignInButton } from '@/components/auth/google/BtnLogin'
 import { ButtonLink } from '@/components/ui/buttons/buttonLink'
+
 import { getAuthSession } from '@/lib/session'
 
 export default async function HomePage() {
