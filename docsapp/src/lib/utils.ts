@@ -37,3 +37,22 @@ export const getAllowedEmails = (): string[] => {
 
   return allowedEmails
 }
+
+/**
+ * Removes docs route segments enclosed in parenthesis eg., "(guides)"
+ * @param {string} docsRoute Full file path to a docs source file
+ * @returns Docs route string without segments enclosed in parenthesis
+ */
+export const cleanSourceRoute = (docsRoute: string) => {
+  const segments = docsRoute.split('/')
+
+  const build = segments.reduce((list, item) => {
+    if (!item.startsWith('(')) {
+      list = list + '/' + item
+    }
+
+    return list.replace('//', '/')
+  }, '')
+
+  return build
+}
