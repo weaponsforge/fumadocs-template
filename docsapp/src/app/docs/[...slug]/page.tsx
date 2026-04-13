@@ -10,6 +10,7 @@ import {
 import { createRelativeLink } from 'fumadocs-ui/mdx'
 
 import { getMDXComponents } from '@/components/mdx'
+
 import { getPageImage, source } from '@/lib/source'
 import { getPageMarkdownUrl } from '@/lib/source'
 
