@@ -1,5 +1,5 @@
 import './global.css'
-import { Inter } from 'next/font/google'
+import {  Geist, Geist_Mono, Inter } from 'next/font/google'
 
 import { RootProvider } from 'fumadocs-ui/provider/next'
 
@@ -28,9 +28,19 @@ const inter = Inter({
   subsets: ['latin'],
 })
 
+const geist = Geist({
+  variable: '--font-sans',
+  subsets: ['latin'],
+});
+
+const mono = Geist_Mono({
+  variable: '--font-mono',
+  subsets: ['latin'],
+});
+
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html lang="en" className={`${geist.variable} ${mono.variable} ${inter.className}`} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <PwaClient />
         <RootProvider>{children}</RootProvider>
