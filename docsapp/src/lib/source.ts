@@ -16,7 +16,9 @@ export const source = loader({
 })
 
 // All docs sources excluding those in the private routes
-export const publicSource = loader(buildCustomSource(PRIVATE_ROUTES), {
+export const publicSource = loader(buildCustomSource({
+  excludedRoutes: PRIVATE_ROUTES,
+}), {
   baseUrl: 'docs',
 })
 

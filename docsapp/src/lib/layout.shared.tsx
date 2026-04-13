@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import SignOutLink from '@/components/auth/linkSignout'
+import SignOutLink from '@/components/auth/LinkSignout'
 
 import { getAuthSession } from '@/lib/session'
 

@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 
 import { RootProvider } from 'fumadocs-ui/provider/next'
 
-import PwaClient from '@/components/pwaClient'
+import PwaClient from '@/components/common/PwaClient'
 
 import type { Metadata } from 'next'
 

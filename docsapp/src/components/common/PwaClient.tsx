@@ -1,5 +1,5 @@
 'use client'
-import { usePwaRegister } from '@/hooks/pwaRegister'
+import { usePwaRegister } from '@/hooks/usePwaRegister'
 
 export default function PwaClient() {
   usePwaRegister()
