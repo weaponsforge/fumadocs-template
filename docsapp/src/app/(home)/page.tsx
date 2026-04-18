@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { GoogleSignInButton } from '@/components/auth/google/BtnLogin'
-import { ButtonLink } from '@/components/ui/buttons/buttonLink'
+import { ButtonLink } from '@/components/ui/buttons/ButtonLink'
 
 import { getAuthSession } from '@/lib/session'
 

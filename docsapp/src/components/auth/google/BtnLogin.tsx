@@ -2,7 +2,7 @@
 
 import { signIn } from 'next-auth/react'
 
-import { CustomButton } from '@/components/ui/buttons/buttonCustom'
+import { CustomButton } from '@/components/ui/buttons/ButtonCustom'
 
 export function GoogleSignInButton() {
   return (
