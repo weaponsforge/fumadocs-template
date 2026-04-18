@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -22,7 +21,7 @@
       "@/hooks*": ["./src/hooks/*"],
       "@/lib*": ["./src/lib/*"],
       "@/.source": ["./.source/index.ts"],
-      "collections/*": [".source/*"],
+      "collections/*": ["./.source/*"],
     },
     "plugins": [
       {
