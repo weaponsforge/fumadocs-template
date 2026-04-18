@@ -1,6 +1,6 @@
 {
   "name": "fumadocs-template",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -14,12 +14,12 @@
     "docker:build": "IS_BUILD_DOCKER=1 npm run build"
   },
   "dependencies": {
-    "fumadocs-core": "16.7.14",
-    "fumadocs-mdx": "14.2.13",
-    "fumadocs-ui": "16.7.14",
+    "fumadocs-core": "16.7.16",
+    "fumadocs-mdx": "14.3.0",
+    "fumadocs-ui": "16.7.16",
     "lucide-react": "^1.8.0",
-    "next": "16.2.3",
-    "next-auth": "^4.24.13",
+    "next": "16.2.4",
+    "next-auth": "^4.24.14",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "tailwind-merge": "^3.5.0"
@@ -27,12 +27,12 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.2",
     "@types/mdx": "^2.0.13",
-    "@types/node": "^25.5.1",
+    "@types/node": "^25.6.0 ",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "eslint-config-next": "^16.2.3",
+    "eslint-config-next": "^16.2.4",
     "eslint-plugin-import": "^2.32.0",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.10",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
   }
