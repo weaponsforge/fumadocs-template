@@ -7,17 +7,19 @@ It features basic setup, configurations, sign-in authentication, and tooling to 
 
 > Next application code lives inside the `/src` directory.
 
-### Demo
+### 🎬 Demo
 
 https://fumadocs-template-ten.vercel.app/
 
-### Features
+### 🎯 Features
 
 - [Fumadocs](https://www.fumadocs.dev/) basic setup
 - Public docs pages
 - Private docs pages gated by Google sign-in (via Google OAuth)
-- Docker setup for local development and production deployment
+- Docker setup for local development and production deployment outside Vercel
 - ESLint setup
+
+---
 
 ### 📋 Requirements
 
