@@ -21,6 +21,14 @@ export default async function Page(props: PageProps<'/docs/[...slug]'>) {
   const page = source.getPage(params.slug)
   if (!page) notFound()
 
+  const timestamp = page?.data?.lastModified ?? new Date()
+
+  const lastModifiedDate = new Date(timestamp).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+
   const MDX = page.data.body
   const markdownUrl = getPageMarkdownUrl(page).url
 
@@ -35,6 +43,9 @@ export default async function Page(props: PageProps<'/docs/[...slug]'>) {
       <DocsDescription>{page.data.description}</DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
+      </div>
+      <div className="w-full text-sm text-zinc-500 ">
+        Last updated on {lastModifiedDate}
       </div>
       <DocsBody>
         <MDX
