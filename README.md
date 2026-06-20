@@ -11,6 +11,14 @@ It features basic setup, configurations, sign-in authentication, and tooling to 
 
 https://fumadocs-template-ten.vercel.app/
 
+### Features
+
+- [Fumadocs](https://www.fumadocs.dev/) basic setup
+- Public docs pages
+- Private docs pages gated by Google sign-in (via Google OAuth)
+- Docker setup for local development and production deployment
+- ESLint setup
+
 ### 📋 Requirements
 
 #### 1. NodeJS v24
@@ -24,7 +32,7 @@ npm v11.6.1
 #### 2. Google OAuth2 Client (optional)
 
 - This requires a Google Cloud Platform project configured with [OAuth2](https://developers.google.com/workspace/guides/configure-oauth-consent) settings and [credentials](https://developers.google.com/workspace/guides/manage-credentials).
-- Read on the Google [Gmail](https://developers.google.com/gmail/api/guides), [SMTP and OAuth2 Setup](https://github.com/weaponsforge/email-sender?tab=readme-ov-file#using-the-oauth-20-playground) sections for more information.
+- Read the [GOOGLE_OAUTH.md](/docs/GOOGLE_OAUTH.md) for more information in setting up Google OAuth for sign-in.
 - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
 - Add the following in your Google Client ID's **Authorized redirect URIs**:
    - https://<YOUR_DEPLOYED_APP_ROOT_DOMAIN>/api/auth/callback/google<br>
