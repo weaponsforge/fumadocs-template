@@ -5,7 +5,7 @@ This is a Next.js (App Router) application generated with
 
 It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
 
-> Next application code lives inside the `/src` directory.
+> Next application code lives inside the `/docsapp/src` directory.
 
 ### 🎬 Demo
 

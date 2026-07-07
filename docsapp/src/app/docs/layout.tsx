@@ -5,14 +5,16 @@ import { DocsLayout } from 'fumadocs-ui/layouts/docs'
 import { appName } from '@/lib/constants'
 import { baseOptions } from '@/lib/layout.shared'
 import { source } from '@/lib/source'
+import { getAppVersion } from '@/lib/utils'
 
 export default async function Layout({ children }: LayoutProps<'/docs'>) {
   const base = await baseOptions()
+  const appVersion = getAppVersion()
 
   return (
     <DocsLayout
       {...base}
-      tree={source.pageTree}
+      tree={source.getPageTree()}
       nav={{
         ...base.nav,
         title: (
@@ -25,8 +27,9 @@ export default async function Layout({ children }: LayoutProps<'/docs'>) {
               aria-hidden="true"
             />
 
-            <div className="font-medium in-[.uwu]:hidden max-md:hidden">
-              {appName}
+            <div className="font-medium in-[.uwu]:hidden max-md:hidden flex gap-1 items-center">
+              <div>{appName}</div>
+              <div className="text-xs font-light">{appVersion}</div>
             </div>
           </>
         ),

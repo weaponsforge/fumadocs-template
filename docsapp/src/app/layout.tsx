@@ -1,5 +1,5 @@
 import './global.css'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, JetBrains_Mono } from 'next/font/google'
 
 import { RootProvider } from 'fumadocs-ui/provider/next'
 
@@ -36,14 +36,16 @@ const geist = Geist({
   subsets: ['latin'],
 })
 
-const mono = Geist_Mono({
+const mono = JetBrains_Mono({
   variable: '--font-mono',
   subsets: ['latin'],
 })
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${geist.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geist.variable} ${mono.variable} "font-sans"`}
+      suppressHydrationWarning
+    >
       <body className="flex flex-col min-h-screen">
         <PwaClient />
         <RootProvider>{children}</RootProvider>
