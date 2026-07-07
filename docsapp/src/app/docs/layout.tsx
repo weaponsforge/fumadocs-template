@@ -14,7 +14,7 @@ export default async function Layout({ children }: LayoutProps<'/docs'>) {
   return (
     <DocsLayout
       {...base}
-      tree={source.pageTree}
+      tree={source.getPageTree()}
       nav={{
         ...base.nav,
         title: (
