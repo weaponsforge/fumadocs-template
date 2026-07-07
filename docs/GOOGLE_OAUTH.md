@@ -18,7 +18,7 @@
 
 5. Select the newly-created project.
 
-6. Go to **Quick Access** -> **APIs & Services** -> **OAuth consent screen**.
+6. Go to **Quick Access** ➝ **APIs & Services** ➝ **OAuth consent screen**.
    - Click the **Get started** button. Fill in the following information:
    - **App Information**
       ```text
@@ -27,11 +27,11 @@
       ```
    - **Audience**: _(select **External**)_
    - **Contact Information**: _(your email/s for contact)_
-      > **INFO**: You could use other emails other than your signed-in email
+      > 💡 **INFO**: You could use other emails other than your signed-in email
    - Click the **Finish** button.
    - Click the **Create** button.
 
-7. Go to https://console.cloud.google.com/. Select your project. Then **Quick Access** -> **APIs & Services** -> **Credentials**.
+7. Go to https://console.cloud.google.com/. Select your project. Then **Quick Access** ➝ **APIs & Services** ➝ **Credentials**.
   - Click the **+ Create credentials** button
   - Select **OAuth client ID**
   - Select the following when prompted:
@@ -48,7 +48,7 @@
      ```
   - Click the **Create** button.
 
-      > **NOTE**<br>
+      > 💡 **NOTE**<br>
       > Take note of the **Client ID** and **Client secret** that will be displayed
 
 <br>
