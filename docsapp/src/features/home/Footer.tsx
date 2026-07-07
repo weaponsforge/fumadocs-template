@@ -1,11 +1,8 @@
 import Link from 'next/link'
 
 import { appName } from '@/lib/constants'
-import { getAppVersion } from '@/lib/utils'
 
 export default function Footer () {
-  const appVersion = getAppVersion()
-
   return (
     <div className="w-full max-w-[1400px] mx-auto p-10 text-center">
       <div className="border border-x-0 border-b-0 p-4 pt-8 pb-0">
@@ -25,7 +22,7 @@ export default function Footer () {
           </a>. All rights reserved.
 
           <div>
-            {appVersion}
+            {process.env.NEXT_PUBLIC_APP_VERSION}
           </div>
         </div>
       </div>
