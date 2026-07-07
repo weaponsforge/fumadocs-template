@@ -1,6 +1,10 @@
 import { createMDX } from 'fumadocs-mdx/next'
 
+import packageJson from './package.json' with { type: 'json' }
+
 const withMDX = createMDX()
+const appVersion = `v${packageJson?.version ?? '0.0.0'}`
+
 const IS_BUILD_STATIC = process.env.IS_BUILD_STATIC === '1'
 const IS_BUILD_DOCKER = process.env.IS_BUILD_DOCKER === '1'
 
@@ -30,6 +34,9 @@ const config = {
         pathname: '**',
       },
     ],
+  },
+  env: {
+    NEXT_PUBLIC_APP_VERSION: appVersion,
   },
 }
 

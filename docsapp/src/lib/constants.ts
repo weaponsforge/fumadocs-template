@@ -1,4 +1,7 @@
 export const appName = process.env.APP_NAME || 'Fumadocs Template'
+export const appShortName = process.env.APP_SHORT_NAME || 'Fumadocs'
+export const appDescription = process.env.APP_DESCRIPTION || 'Documentation website demo'
+
 export const docsRoute = '/docs'
 export const docsImageRoute = '/og/docs'
 export const docsContentRoute = '/llms.mdx/docs'
