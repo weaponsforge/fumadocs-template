@@ -1,5 +1,3 @@
-import packageJson from '../../package.json' with { type: 'json' }
-
 /**
  * Helper to get single domain for hosted domain parameter
  * (Google's hosted domain restriction)
@@ -57,12 +55,4 @@ export const cleanSourceRoute = (docsRoute: string) => {
   }, '')
 
   return build
-}
-
-/**
- * Get the app's version number
- * @returns {string} app version number
- */
-export const getAppVersion = () => {
-  return `v${packageJson?.version ?? '0.0.0'}`
 }

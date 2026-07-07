@@ -155,6 +155,8 @@ Create a `.env.local` file from the `.env.example` file.
 | IS_WEBPACK | Set to `1` to run the app in development mode using **Webpack**. <br><br>⭐ **IMPORTANT**: When running the app via **Docker** on Windows OS (`docker compose up`), this must be set to `1` to enable hot reload.|
 | WATCHPACK_POLLING | Set to `true` to enable Webpack-based hot reloading when running the app in Docker on Windows. Required because Turbopack hot reload is currently unreliable in this setup (Docker + Windows). |
 | APP_NAME | Name of your Fumadocs documentation app. Defaults to `"Fumadocs Template"` |
+| APP_SHORT_NAME | Shortname for this documentation app. Defaults to `"Fumadocs"` |
+| APP_DESCRIPTION | Documentation website short description. Defaults to `"Documentation website demo"` |
 | GH_USERNAME | Your GitHub username |
 | GH_REPOSITORY | GitHub repository containing this documentation app |
 | GH_REPO_DEFAULT_BRANCH | Default branch of the `GH_REPOSITORY`. Defaults to `"main"` |
