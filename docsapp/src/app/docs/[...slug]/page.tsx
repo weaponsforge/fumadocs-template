@@ -36,7 +36,6 @@ export default async function Page(props: PageProps<'/docs/[...slug]'>) {
     <DocsPage
       toc={page.data.toc}
       full={page.data.full}
-      tableOfContent={{ style: 'clerk' }}
       // lastUpdate={new Date(page.data.lastModified)}
     >
       <DocsTitle>{page.data.title}</DocsTitle>

@@ -56,7 +56,7 @@ const eslintConfig = defineConfig([
       'no-restricted-imports': [
         'error',
         {
-          'patterns': ['@/features/*', './features/*'],
+          'patterns': ['@/features/*/*'],
         },
       ],
       'import/order': [

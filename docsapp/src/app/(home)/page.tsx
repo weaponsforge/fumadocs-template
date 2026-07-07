@@ -5,6 +5,8 @@ import { ButtonLink } from '@/components/ui/buttons/ButtonLink'
 
 import { getAuthSession } from '@/lib/session'
 
+import { Footer } from '@/features/home'
+
 export default async function HomePage() {
   const session = await getAuthSession()
 
@@ -27,8 +29,8 @@ export default async function HomePage() {
   )
 
   return (
-    <main className="min-h-100 flex flex-col pt-8">
-      <div className="max-w-screen-md w-full p-4 mx-auto">
+    <main className="h-screen flex flex-col pt-8">
+      <div className="max-w-screen-md w-full h-full p-4 mx-auto">
         <h1 className="mb-4 text-2xl font-bold">Hello World</h1>
         <p className="text-fd-muted-foreground">
           You can open{' '}
@@ -43,6 +45,7 @@ export default async function HomePage() {
 
         {renderButton}
       </div>
+      <Footer />
     </main>
   )
 }

@@ -4,6 +4,8 @@ import Link, { type LinkProps } from 'next/link'
 
 import { BookLock, FileUser, MapPinPlus, Shield, Swords } from 'lucide-react'
 
+import { Footer } from '@/features/home'
+
 const docsTopics = [
   {
     name: 'Characters',
@@ -39,24 +41,28 @@ const docsTopics = [
 
 export default function DocsPage() {
   return (
-    <main className="container flex flex-col flex-1 justify-center items-center py-16 text-center z-2 m-auto">
-      <h1 className="mb-4 text-3xl font-semibold md:text-4xl">
-        Getting Started
-      </h1>
-      <p className="text-fd-muted-foreground">
-        Portal to different sections of docs.
-      </p>
-      <div className="mt-8 grid grid-cols-1 gap-4 text-start sm:grid-cols-2 md:grid-cols-3">
-        {docsTopics.map((item) => (
-          <Item key={item.name} href={item.href}>
-            <Icon>{item.icon}</Icon>
-            <h2 className="mb-2 font-medium">{item.name}</h2>
-            <p className="text-sm text-fd-muted-foreground">
-              {item.description}
-            </p>
-          </Item>
-        ))}
+    <main className="h-screen container m-auto">
+      <div className="flex flex-col flex-1 justify-center items-center h-full py-16 text-center z-2">
+        <h1 className="mb-4 text-3xl font-semibold md:text-4xl">
+          Getting Started
+        </h1>
+        <p className="text-fd-muted-foreground">
+          Portal to different sections of docs.
+        </p>
+        <div className="mt-8 grid grid-cols-1 gap-4 text-start sm:grid-cols-2 md:grid-cols-3">
+          {docsTopics.map((item) => (
+            <Item key={item.name} href={item.href}>
+              <Icon>{item.icon}</Icon>
+              <h2 className="mb-2 font-medium">{item.name}</h2>
+              <p className="text-sm text-fd-muted-foreground">
+                {item.description}
+              </p>
+            </Item>
+          ))}
+        </div>
       </div>
+
+      <Footer />
     </main>
   )
 }
