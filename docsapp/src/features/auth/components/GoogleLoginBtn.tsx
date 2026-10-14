@@ -2,7 +2,7 @@
 
 import { CustomButton } from '@/components/ui/buttons/ButtonCustom'
 
-import { signIn } from '../utils/authClient'
+import { signIn } from '../lib/client'
 
 export default function GoogleSignInButton({ callbackURL }: { callbackURL?: string }) {
   return (
