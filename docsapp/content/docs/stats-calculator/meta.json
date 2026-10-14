@@ -1,0 +1,12 @@
+{
+  "title": "Stats Calculator",
+  "root": true,
+  "description": "Character Stats Calculator",
+  "icon": "Calculator",
+  "pages": [
+    "---Guide---",
+    "index",
+    "---Calculators---",
+    "wizard"
+  ]
+}
