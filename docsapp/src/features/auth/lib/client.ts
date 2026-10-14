@@ -1,6 +1,6 @@
 import { createAuthClient } from 'better-auth/client'
 
-import { AUTH_ROUTES } from './constants'
+import { AUTH_ROUTES } from '../utils/constants'
 
 const {
   signIn: signInMethod,
