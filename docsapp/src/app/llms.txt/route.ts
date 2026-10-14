@@ -1,5 +1,4 @@
-import { llms } from 'fumadocs-core/source'
-
+import { docsLlms } from '@/lib/llms'
 import { getAuthSession } from '@/lib/session'
 import { publicSource, source } from '@/lib/source'
 
@@ -8,9 +7,7 @@ export const revalidate = false
 export async function GET() {
   const session = await getAuthSession()
 
-  if (!session) {
-    return new Response(llms(publicSource).index())
-  }
-
-  return new Response(llms(source).index())
+  return session
+    ? new Response(await docsLlms(source).index())
+    : new Response(await docsLlms(publicSource).index())
 }

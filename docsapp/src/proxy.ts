@@ -15,7 +15,7 @@ import {
 } from '@/features/auth'
 
 const { rewrite: rewriteLLM } = rewritePath('/docs/*path', '/llms.mdx/*path')
-const { rewrite: rewriteMdx } = rewritePath('/docs{/*path}.mdx', '/llms.mdx{/*path}')
+const { rewrite: rewriteMdx } = rewritePath('/docs{/*path}.md{x}', '/llms.mdx{/*path}')
 
 if (!GOOGLE_AUTH_CONFIGURED) {
   console.warn(

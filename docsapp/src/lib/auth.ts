@@ -10,13 +10,15 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
   user: {
     validateUserInfo: ({ user }) => {
-      if (!isEmailAllowed(user.email)) {
+      const userEmail = user?.email || ''
+
+      if (!isEmailAllowed(userEmail)) {
         return {
           error: AUTH_ERROR.ACCESS_DENIED,
-          errorDescription: B_STATUS_CODES.FORBIDDEN
+          errorDescription: B_STATUS_CODES.FORBIDDEN,
         }
       }
-    }
+    },
   },
   socialProviders: {
     ...(GOOGLE_AUTH_CONFIGURED && {

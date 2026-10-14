@@ -1,4 +1,4 @@
-import { getLLMText } from '@/lib/getLlmText'
+import { docsLlms } from '@/lib/llms'
 import { getAuthSession } from '@/lib/session'
 import { publicSource, source } from '@/lib/source'
 
@@ -6,17 +6,10 @@ export const revalidate = false
 
 export async function GET() {
   const session = await getAuthSession()
-  let scan
 
-  if (!session) {
-    scan = publicSource
-      .getPages()
-      .map(getLLMText)
-  } else {
-    scan = source.getPages().map(getLLMText)
-  }
+  const scanned = session
+    ? await docsLlms(source).full()
+    : await docsLlms(publicSource).full()
 
-  const scanned = await Promise.all(scan)
-
-  return new Response(scanned.join('\n\n'))
+  return new Response(scanned)
 }
