@@ -43,10 +43,10 @@ This design provides a clean, maintainable authentication foundation that future
 ### 1. User Initiates Sign-in
 Users can start authentication from:
 - Public pages: eg., `/docs`
-- Protected pages eg., `/docs/secrets`
+- Protected pages eg., `/docs/secrets/map`
 
 For protected routes, unauthenticated users are redirected to: `/auth/signin`<br>
-Example: `/auth/signin?code=signin&callbackURL=/docs/secrets`
+Example: `/auth/signin?code=signin&callbackURL=/docs/secrets/map`
 
 The sign-in button calls `signIn()` from `features/auth/lib/client.ts`, which starts the Better Auth social sign-in:
 ```typescript
@@ -162,7 +162,7 @@ User Authenticated
 ## 🟢 Protected Route Handling
 > 💡 Protected routes are enforced in `proxy.ts`
 
-The proxy checks every incoming request.
+The proxy checks every incoming request with `RouteHandler.isPrivateRoute(pathname)` (from `@/lib/routes`).
 ```text
 Request
    ⭣
@@ -178,6 +178,8 @@ Is this a private route?
 ```
 
 >💡 **Note on proxy scope:** `proxy.ts` performs a full session decode + allowlist check on every private-route request, rather than a lightweight cookie-existence check. This is intentional: `getAuthSession()` reads only the signed session cookie — no DB or store lookup — so the per-request cost stays low enough to justify the stronger guarantee (a user removed from the allowlist loses access on their *next* request, not just their next login). If `getAuthSession()` ever starts hitting a DB/session store, this tradeoff should be revisited.
+
+App routes that serve LLMs content (`/llms.txt`, `/llms-full.txt`, `/llms.mdx`) also checks the session for auth independent of `proxy.ts`.
 
 ### No Session
 If the user is not authenticated:
@@ -211,18 +213,35 @@ isActiveUserAllowed(session)
 
 ### Private Routes
 
-Private routes are defined centrally in the following files:
-- `/lib/constants.ts` — `privateRoutes`
-- `/lib/shared.ts` — `PRIVATE_ROUTES` (derived from `privateRoutes.matcher`)
+Private routes are defined centrally in `/lib/routes/routes.ts`:
+- `SECTIONS` — the docs sections (folder names under `content/docs`)
+- `PRIVATE_SECTIONS` — sections that are private, along with every route under them (currently `secrets`, `stats-calculator`)
+- `PRIVATE_ROUTES` — derived from `PRIVATE_SECTIONS`. Each section expands to its `/docs/<section>` and `/llms.mdx/<section>` forms, plus the `.mdx` variant of each.
+
+`/lib/routes/index.ts` exports `RouteHandler`, a `RouteUtil` instance (`/lib/routes/routeUtil.ts`) built from `PRIVATE_ROUTES`. Its `isPrivateRoute(pathname)` is the single private-route check, used by:
+- `proxy.ts` — request protection
+- `lib/sourceBuilder.tsx` — splitting the docs source into public and private content (`publicSource` uses `buildCustomSource({ isPrivate: false })`)
+
+Before matching, `isPrivateRoute()` normalizes `/llms.mdx/...` paths and `.mdx` suffixes to the canonical `/docs/...` form. A route is private when its canonical path equals a private prefix or falls under one, and it is not a public exception.
+
+### Public Exceptions
+
+`PUBLIC_EXCEPTIONS` in `/lib/routes/routes.ts` lists exact canonical paths that stay public inside an otherwise private section. Write them in canonical form only, with no `/llms.mdx` prefix or `.mdx` suffix:
+```text
+/docs/secrets
+/docs/secrets/skill-tips
+```
 
 ### Public Routes
 
-All routes not listed in `PRIVATE_ROUTES` remain publicly accessible eg.,
+All routes outside `PRIVATE_SECTIONS`, plus the `PUBLIC_EXCEPTIONS`, remain publicly accessible eg.,
 ```text
 /
+/docs
 /docs/characters
 /docs/weapons
-/docs
+/docs/secrets             (public exception)
+/docs/secrets/skill-tips  (public exception)
 ```
 > A user who fails authentication can still browse public content.
 
@@ -270,7 +289,7 @@ Should NOT handle:
 ### `proxy.ts`
 
 Responsibility:
-- Protect private routes
+- Protect private routes (via `RouteHandler.isPrivateRoute()`)
 - Redirect unauthenticated users
 - Call `isActiveUserAllowed()` for session authorization
 
@@ -360,7 +379,8 @@ When modifying authentication:
 - [ ] Update `features/auth/lib/auth.ts` for identity/provider changes (not `lib/auth.ts`, which is a re-export)
 - [ ] Update `isEmailAllowed()` in `lib/utils.ts` - `ALLOWED_EMAILS` / `ALLOWED_EMAIL_DOMAINS` .env variables for allowlist rules
 - [ ] Update `errorCallbackURL` in `features/auth/lib/client.ts` for auth error redirects
-- [ ] Update `proxy.ts` for protected routes
-- [ ] Update `lib/constants.ts` -> `privateRoutes` with new private/protected routes
+- [ ] Update `lib/routes/routes.ts`: add new sections to `SECTIONS` / `PRIVATE_SECTIONS`, and add public carve-outs to `PUBLIC_EXCEPTIONS` (`proxy.ts` and the docs source pick these up automatically)
+- [ ] Add new sections to `CATEGORY` / `getSection()` in `lib/source/navigation.ts`
 - [ ] Keep public routes accessible
 - [ ] Never expose protected pages only through client-side checks
+- [ ] Verify that `/llms.txt`, `/llms-full.txt` and `/llms.mdx` properly exposes public/private content

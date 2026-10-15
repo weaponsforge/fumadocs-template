@@ -73,6 +73,62 @@ Open http://localhost:3000 with your browser to see the result.
 > [!NOTE]
 > Look over the [Ennvironment Variables](#environment-variables) section for more building and Authentication options.
 
+## ➕ Adding New Content
+
+1. Create new `.mdx` files under the existing folders in `/content/docs/<category-folder>`.
+2. Create a new folder `<new-category>` under `/content/docs` to create a new group or category.
+
+   Refer to the patterns under `contents/docs/secrets/` and the [Fumadocs](https://www.fumadocs.dev/docs) documentation for more information.
+
+
+   ```text
+   content/
+   └── docs/
+       └── <new-category>/
+           ├── index.mdx      # Root page
+           ├── meta.json
+           ├── demo.mdx       # Sub-page
+           └── intro.mdx      # Sub-page
+   ```
+3. Register its route name (eg., `<>new-category`) `SECTIONS` in `/lib/routes/routes.ts`.
+
+   > **INFO**: Route names correspond to its folder name under `/content/docs`
+
+   ```ts
+   // Corresponds to the main documentation sections (folder names)
+   // under /docsapp/content/docs
+   export const SECTIONS = {
+     CHARACTERS: 'characters',
+     SECRETS: 'secrets',
+     STATS_CALCULATOR: 'stats-calculator',
+     WEAPONS: 'weapons',
+     // --> Add new category here
+   }
+   ```
+
+4. If the new category group contents are private and auth-gated, register its route name under `PRIVATE_SECTIONS` in `/lib/routes/routes.ts`
+
+   ```ts
+   // Sections defined here and all routes under it are private
+   export const PRIVATE_SECTIONS = [
+     SECTIONS.SECRETS,
+     SECTIONS.STATS_CALCULATOR,
+     // --> Add new category section here
+   ] as const
+   ```
+
+5. If a public content is within a private category/group, register its "exact" path under `PUBLIC_EXCEPTIONS` also in `/lib/routes/routes.ts`.
+
+   ```ts
+   // Exact paths carved out of an otherwise-private section.
+   // Canonical form only — no /llms.mdx or .mdx suffix needed here.
+   export const PUBLIC_EXCEPTIONS = [
+      `/${DOCS_ROUTE_SEGMENT}/${SECTIONS.SECRETS}`,
+      `/${DOCS_ROUTE_SEGMENT}/${SECTIONS.SECRETS}/skill-tips`,
+      // --> Add new route path here
+   ]
+   ```
+
 <br>
 
 ## Contributing

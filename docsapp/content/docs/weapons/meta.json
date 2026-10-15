@@ -2,7 +2,7 @@
   "title": "Weapons",
   "root": true,
   "description": "MU Online weapons",
-  "icon": "Building",
+  "icon": "Swords",
   "pages": [
     "---Guide---",
     "index",

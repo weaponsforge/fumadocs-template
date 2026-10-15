@@ -1,13 +1,10 @@
-const SECTIONS = {
-  CHARACTERS: 'characters',
-  WEAPONS: 'weapons',
-  SECRETS: 'secrets',
-}
+import { SECTIONS } from '@/lib/routes/routes'
 
 export const CATEGORY = {
   [SECTIONS.CHARACTERS]: 'MU Online Characters',
   [SECTIONS.WEAPONS]: 'MU Online Weapons',
   [SECTIONS.SECRETS]: 'MU Online Secrets / Tips',
+  [SECTIONS.STATS_CALCULATOR]: 'Character Stats Calculator',
 }
 
 export function getSection(path: string | undefined) {
@@ -19,6 +16,7 @@ export function getSection(path: string | undefined) {
     {
       [SECTIONS.WEAPONS]: SECTIONS.WEAPONS,
       [SECTIONS.SECRETS]: SECTIONS.SECRETS,
+      [SECTIONS.STATS_CALCULATOR]: SECTIONS.STATS_CALCULATOR,
     }[dir] ?? SECTIONS.CHARACTERS
   )
 }

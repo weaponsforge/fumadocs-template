@@ -21,11 +21,3 @@ export const baseUrl =
     : new URL(`${process.env.BETTER_AUTH_URL}`)
 
 export const GOOGLE_AUTH_CONFIGURED = isGoogleOauthSet()
-
-export const privateRoutes = {
-  matcher: [
-    '/docs/secrets.mdx', // Add here if its actually index.mdx
-    '/docs/secrets/:path*',
-    '/llms.mdx/secrets/:path*',
-  ],
-}
