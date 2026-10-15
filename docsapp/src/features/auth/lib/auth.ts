@@ -3,7 +3,7 @@ import { betterAuth } from 'better-auth'
 import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
 import { getHostedDomain, isEmailAllowed } from '@/lib/utils'
 
-import { AUTH_ERROR, B_STATUS_CODES } from '@/features/auth'
+import { AUTH_ERROR, B_STATUS_CODES } from '../utils/constants'
 
 // Better Auth settings
 export const auth = betterAuth({
