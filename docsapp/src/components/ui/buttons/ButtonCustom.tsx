@@ -20,7 +20,7 @@ export interface CustomButtonProps {
   icon?: string;
   image?: string;
   styles?: StylesInterface;
-  callback?: () => void;
+  callback?: () => void | Promise<void>;
 }
 
 const ButtonState = {
@@ -51,9 +51,17 @@ export function CustomButton(props: CustomButtonProps) {
     styles?.label,
   )
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
+    if (status === ButtonState.LOADING) return
+
     setStatus(ButtonState.LOADING)
-    callback?.()
+
+    try {
+      await callback?.()
+    } catch {
+      // Action failed - restore the button so the user can retry.
+      setStatus(ButtonState.ACTIVE)
+    }
   }
 
   return (

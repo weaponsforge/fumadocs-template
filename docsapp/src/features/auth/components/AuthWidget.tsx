@@ -9,11 +9,13 @@ import { useAuthError } from '../hooks/useAuthError'
 import { signOut } from '../lib/client'
 
 export default function AuthWidget() {
-  const { errorCode, errorInfo, callbackURL } = useAuthError()
+  const { errorCode, errorInfo, callbackURL, isAccessDenied } = useAuthError()
 
   useEffect(() => {
-    signOut()
-  }, [])
+    if (isAccessDenied) {
+      signOut()
+    }
+  }, [isAccessDenied])
 
   return (
     <div className="flex flex-col items-center gap-3 min-w-sm p-8 rounded-xl bg-white ">

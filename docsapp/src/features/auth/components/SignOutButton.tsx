@@ -14,7 +14,9 @@ export default function SignOutButton(props: CustomButtonProps) {
   const handleClick = async () => {
     const { error } = await signOut()
 
-    if (error) return
+    if (error) {
+      throw error
+    }
 
     router.replace('/')
     router.refresh()

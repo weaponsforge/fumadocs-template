@@ -12,7 +12,7 @@ import {
   AUTH_ERROR,
   AUTH_QUERY,
   AUTH_ROUTES,
-} from '@/features/auth'
+} from '@/features/auth/server'
 
 const { rewrite: rewriteLLM } = rewritePath('/docs/*path', '/llms.mdx/*path')
 const { rewrite: rewriteMdx } = rewritePath('/docs{/*path}.md{x}', '/llms.mdx{/*path}')
