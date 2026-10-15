@@ -9,7 +9,7 @@ The app makes extensive use of the **Next.js App Router**, **React Server Compon
 
 > [!TIP]
 > Next.js application code and workflow ([AGENTS.md](/docsapp/AGENTS.md)) documentation lives in `docsapp/`.<br>
-> Developer guides live in `docs/`: [AUTHENTICATION.md](/docs/AUTHENTICATION.md) (auth architecture and route protection) and [GOOGLE_OAUTH.md](/docs/GOOGLE_OAUTH.md) (Google OAuth client setup).
+> Developer guides live in `docsapp/docs/`: [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) (auth architecture and route protection) and [GOOGLE_OAUTH.md](/docsapp/docs/GOOGLE_OAUTH.md) (Google OAuth client setup).
 
 ### 🎬 Demo
 
@@ -39,7 +39,7 @@ npm v11.6.1
 #### 2. Google OAuth2 Client (optional)
 
 - This requires a Google Cloud Platform project configured with [OAuth2](https://developers.google.com/workspace/guides/configure-oauth-consent) settings and [credentials](https://developers.google.com/workspace/guides/manage-credentials).
-- Read the [GOOGLE_OAUTH.md](/docs/GOOGLE_OAUTH.md) for more information in setting up Google OAuth for sign-in.
+- Read the [GOOGLE_OAUTH.md](/docsapp/docs/GOOGLE_OAUTH.md) for more information in setting up Google OAuth for sign-in.
 - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
 - Add the following in your Google Client ID's **Authorized redirect URIs**:
    - https://<YOUR_DEPLOYED_APP_BASE_URL>/api/auth/callback/google<br>
@@ -173,7 +173,7 @@ In the project, you can see:
 
 - `lib/source.ts`: Code for docs content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
 - `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep. Kept synchronous so layouts render statically — the signed-in user's sign-out widget resolves its session client-side via `useSession()`.
-- `features/auth`: Auth feature. Import client/shared code from `@/features/auth` and the server-only Better Auth instance from `@/features/auth/server`. See [AUTHENTICATION.md](/docs/AUTHENTICATION.md) for the full flow.
+- `features/auth`: Auth feature. Import client/shared code from `@/features/auth` and the server-only Better Auth instance from `@/features/auth/server`. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full flow.
 
 | Route                     | Description                                            |
 | ------------------------- | ------------------------------------------------------ |

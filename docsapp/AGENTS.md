@@ -14,7 +14,7 @@ This file gives agents guidance for working with code in this repository.
 
 ## Project overview
 
-A Fumadocs documentation template built on the Next.js App Router, React Server Components, and Next.js middleware, with Google OAuth–gated private sections, LLM-friendly markdown routes, OG image generation, and PWA support. `docsapp/` is the only app; the repo root holds meta files, Docker Compose files, and developer docs in `../docs/`. The `content/docs/` pages are sample MU Online game docs.
+A Fumadocs documentation template built on the Next.js App Router, React Server Components, and Next.js middleware, with Google OAuth–gated private sections, LLM-friendly markdown routes, OG image generation, and PWA support. `docsapp/` is the only app; the repo root holds meta files and Docker Compose files. Developer docs live in `docs/`, not to be confused with the site content in `content/docs/`. The `content/docs/` pages are sample MU Online game docs.
 
 ## Commands
 
@@ -75,7 +75,7 @@ npm run types:check   # regenerates .source/ (fumadocs-mdx) + next typegen + tsc
 - Allowlisting uses `ALLOWED_EMAIL_DOMAINS` / `ALLOWED_EMAILS`.
 - If `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` are unset, `GOOGLE_AUTH_CONFIGURED` is false and **all private routes are open**. This is the local default.
 - Private images live in `protected/` and are served via `src/app/api/protected-asset/[...path]`. Public assets go in `public/`.
-- When changing auth code (`src/features/auth`, `src/lib/session.ts`, `src/lib/routes/`, `proxy.ts`), update `../docs/AUTHENTICATION.md` in the same change.
+- When changing auth code (`src/features/auth`, `src/lib/session.ts`, `src/lib/routes/`, `proxy.ts`), update `docs/AUTHENTICATION.md` in the same change.
 
 ## Conventions
 
@@ -89,5 +89,5 @@ npm run types:check   # regenerates .source/ (fumadocs-mdx) + next typegen + tsc
 
 Read these before working on the related area:
 
-- [docs/AUTHENTICATION.md](../docs/AUTHENTICATION.md): auth architecture, sign-in flow, route protection config, security model, and developer checklist
-- [docs/GOOGLE_OAUTH.md](../docs/GOOGLE_OAUTH.md): setting up the Google Cloud OAuth client (credentials, redirect URI)
+- [docs/AUTHENTICATION.md](docs/AUTHENTICATION.md): auth architecture, sign-in flow, route protection config, security model, and developer checklist
+- [docs/GOOGLE_OAUTH.md](docs/GOOGLE_OAUTH.md): setting up the Google Cloud OAuth client (credentials, redirect URI)
