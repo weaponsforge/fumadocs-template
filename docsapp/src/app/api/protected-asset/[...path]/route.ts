@@ -1,10 +1,10 @@
 import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
+import { join, resolve, sep } from 'node:path'
 
 import { NextResponse } from 'next/server'
 
 import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
-import { getAuthSession } from '@/lib/session'
+import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
 
 /**
  * Serves auth-protected media assets in protected (private) page routes
@@ -19,7 +19,7 @@ export async function GET(_: Request, context?: any) {
   const PROTECTED_FILE_PATH = 'protected'
   let filePathArray = ['images', 'default.png']
 
-  if (!session && GOOGLE_AUTH_CONFIGURED) {
+  if (GOOGLE_AUTH_CONFIGURED && !isActiveUserAllowed(session)) {
     return new NextResponse('Unauthorized', { status: 401 })
   }
 
@@ -29,7 +29,15 @@ export async function GET(_: Request, context?: any) {
     filePathArray = ctxParams?.path
   }
 
-  const filePath = join(process.cwd(), PROTECTED_FILE_PATH, ...filePathArray)
+  // Resolve against the protected root and confirm the result stays inside it.
+  // Path segments are URL-decoded by Next, so `..` traversal must be rejected
+  // before touching the filesystem.
+  const baseDir = join(process.cwd(), PROTECTED_FILE_PATH)
+  const filePath = resolve(baseDir, ...filePathArray)
+
+  if (filePath !== baseDir && !filePath.startsWith(baseDir + sep)) {
+    return new NextResponse('Not found', { status: 404 })
+  }
 
   try {
     const file = (await readFile(filePath)) as unknown
