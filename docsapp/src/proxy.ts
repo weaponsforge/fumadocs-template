@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation'
 
 import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
+import { RouteHandler } from '@/lib/routes'
 import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
-import { PRIVATE_ROUTES } from '@/lib/shared'
 import { urlBuilder } from '@/lib/utils'
 
 import {
@@ -15,7 +15,7 @@ import {
 } from '@/features/auth'
 
 const { rewrite: rewriteLLM } = rewritePath('/docs/*path', '/llms.mdx/*path')
-const { rewrite: rewriteMdx } = rewritePath('/docs{/*path}.mdx', '/llms.mdx{/*path}')
+const { rewrite: rewriteMdx } = rewritePath('/docs{/*path}.md{x}', '/llms.mdx{/*path}')
 
 if (!GOOGLE_AUTH_CONFIGURED) {
   console.warn(
@@ -25,11 +25,7 @@ if (!GOOGLE_AUTH_CONFIGURED) {
 
 export default async function proxy(request: NextRequest) {
   const pathName = request.nextUrl.pathname
-
-  const isPrivateRoute = PRIVATE_ROUTES.some(
-    prefix =>
-      pathName === prefix ||
-      pathName.startsWith(`${prefix}/`))
+  const isPrivateRoute = RouteHandler.isPrivateRoute(pathName)
 
   // Private routes
   if (isPrivateRoute && GOOGLE_AUTH_CONFIGURED) {

@@ -4,52 +4,69 @@ import { docs } from 'collections/server'
 
 import { cleanSourceRoute } from '@/lib/utils'
 
+import { RouteHandler } from './routes'
+
+type IDocsSubset =
+  | {
+      excludedRoutes: string[]
+      includedRoutes?: never
+    }
+  | {
+      includedRoutes: string[]
+      excludedRoutes?: never
+    }
+
 interface IBuildCustomSource {
-  excludedRoutes?: string[];
-  includedRoutes?: string[];
+  isPrivate?: boolean;
+  subset?: IDocsSubset;
 }
 
 /**
- * Builds the docs source by filtering the `excludedRoutes` or `includedRoutes` docs
- * @param {string[]} excludedRoutes list of docs routes to exclude, eg., `/docs/secrets`
- * @param {string[]} includedRoutes list of docs routes to include, all else are excluded.
+ * Builds the docs source by filtering the `excludedRoutes` or `includedRoutes` docs subsets.
+ * Builds only the private or public docs content on the `isPrivate` flag if the `subset` paramater is absent.
+ * @param {boolean} isPrivate Flag to build only private auth-gated content. Builds the content if `false` and `subset` is absent.
+ * @param {IDocsSubset} subset Object containing subsets to include/exclude from the docs build. If absent, builds the public content docs by default.
+ * @param {string[]} subset.excludedRoutes list of docs routes to exclude, eg., `/docs/secrets`
+ * @param {string[]} subset.includedRoutes list of docs routes to include, all else are excluded.
  * @returns Fumadocs `Source`
  */
 export const buildCustomSource = ({
-  excludedRoutes,
-  includedRoutes,
+  isPrivate = false,
+  subset,
 }: IBuildCustomSource) => {
-  if (Array.isArray(excludedRoutes) && Array.isArray(includedRoutes)) {
-    throw new Error('Only 1 of excludedRoutes[] or includedRoutes[] should be provided')
+  const hasExcluded = Array.isArray(subset?.excludedRoutes)
+  const hasIncluded = Array.isArray(subset?.includedRoutes)
+
+  if (subset && hasExcluded === hasIncluded) {
+    throw new Error('Exactly 1 of excludedRoutes[] or includedRoutes[] must be provided')
   }
 
-  let cleanExcluded: string[] = []
-  let cleanIncluded: string[] = []
-
-  if (excludedRoutes) {
-    cleanExcluded = excludedRoutes?.map(cleanSourceRoute)
-  }
-
-  if (includedRoutes) {
-    cleanIncluded = includedRoutes?.map(cleanSourceRoute)
-  }
+  const cleanExcluded = subset?.excludedRoutes?.map(cleanSourceRoute) ?? []
+  const cleanIncluded = subset?.includedRoutes?.map(cleanSourceRoute) ?? []
 
   return update(docs.toFumadocsSource())
     .files((files) =>
       files.filter((file) => {
-        const isFilePath = file?.data?.info?.fullPath
+        const fullPath = file?.data?.info?.fullPath
+        if (!fullPath) return true
 
-        if (!isFilePath) return true
-        const fileFullPath = file.data.info.fullPath.replaceAll('\\', '/')
-        const cleanFilePath = cleanSourceRoute(fileFullPath)
+        const cleanFilePath = cleanSourceRoute(
+          fullPath.replaceAll('\\', '/'),
+        )
 
-        if (excludedRoutes) {
-          return cleanExcluded.every((route) => !cleanFilePath.includes(route))
+        if (subset) {
+          // Extract the defined included/excluded subset
+          return hasExcluded
+            ? cleanExcluded.every((route) => !cleanFilePath.includes(route))
+            : cleanIncluded.every((route) => cleanFilePath.includes(route))
         }
 
-        if (includedRoutes) {
-          return cleanIncluded.every((route) => cleanFilePath.includes(route))
-        }
+        // Extract private/public items
+        const normalRoute = cleanFilePath.replace(/^\/content|\.[^.\/]+$/g, '')
+
+        return isPrivate
+          ? RouteHandler.isPrivateRoute(normalRoute)
+          : !RouteHandler.isPrivateRoute(normalRoute)
       }),
     )
     .build()

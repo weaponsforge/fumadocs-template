@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import type { CustomButtonProps } from '@/components/ui/buttons/ButtonCustom'
 import { CustomButton } from '@/components/ui/buttons/ButtonCustom'
 
-import { signOut } from '../utils/authClient'
+import { signOut } from '../lib/client'
 
 export default function SignOutButton(props: CustomButtonProps) {
   const { title, label, image } = props

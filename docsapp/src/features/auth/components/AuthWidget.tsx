@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import GoogleSignInButton from './GoogleLoginBtn'
 import { useAuthError } from '../hooks/useAuthError'
-import { signOut } from '../utils/authClient'
+import { signOut } from '../lib/client'
 
 export default function AuthWidget() {
   const { errorCode, errorInfo, callbackURL } = useAuthError()

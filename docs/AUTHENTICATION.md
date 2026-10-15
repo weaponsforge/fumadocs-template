@@ -7,8 +7,8 @@ The authentication system is designed around a layered approach:
 - **Better Auth** manages authentication and sessions.
 - **Google OAuth** verifies user identity.
 - **`isEmailAllowed()`** is the single allowlist check (email + domain), used by both layers below.
-- **`getUserInfo()`** calls it to perform authorization before session creation.
-- **Auth route wrapper** handles authentication errors and redirects.
+- **`user.validateUserInfo()`** calls it to perform authorization before session creation.
+- **Better Auth's OAuth callback** redirects rejected sign-ins to the `errorCallbackURL` set by the auth client.
 - **`proxy.ts`** calls it again via `isActiveUserAllowed()` to protect private routes (defense-in-depth).
 > [!NOTE]
 > The main goal is:
@@ -43,17 +43,22 @@ This design provides a clean, maintainable authentication foundation that future
 ### 1. User Initiates Sign-in
 Users can start authentication from:
 - Public pages: eg., `/docs`
-- Protected pages eg., `/docs/secrets`
+- Protected pages eg., `/docs/secrets/map`
 
 For protected routes, unauthenticated users are redirected to: `/auth/signin`<br>
-Example: `/auth/signin?callbackUrl=/docs/secrets`
+Example: `/auth/signin?code=signin&callbackURL=/docs/secrets/map`
+
+The sign-in button calls `signIn()` from `features/auth/lib/client.ts`, which starts the Better Auth social sign-in:
+```typescript
+signIn.social({
+  provider: 'google',
+  callbackURL,
+  errorCallbackURL: AUTH_ROUTES.ACCESS_DENIED_FULL, // /auth/error?error=AccessDenied
+})
+```
 
 ### 2. Google OAuth Authentication
-**Better Auth** redirects users to Google through the custom Google provider implementation in `auth.ts`:
-```text
-socialProviders.google.getUserInfo()
-```
-Google returns the user's profile information:
+**Better Auth** redirects users to Google using its built-in Google provider, configured in `features/auth/lib/auth.ts` under `socialProviders.google`. No custom `getUserInfo()` override is used — Better Auth fetches and maps the Google profile itself:
 ```text
 Google ID
 Email
@@ -61,17 +66,24 @@ Name
 Profile Image
 Email Verification Status
 ```
+If `ALLOWED_EMAIL_DOMAINS` contains a single domain, it is also passed to Google as the `hd` (hosted domain) parameter so the account picker only shows accounts from that domain. This is a UX hint only — the allowlist check below is what enforces access.
 
 ### 3. Authorization Before Session Creation
-The most important security decision happens inside `auth.ts` ⟶ `getUserInfo()`.
+The most important security decision happens inside `features/auth/lib/auth.ts` ⟶ `user.validateUserInfo()`.
 ```text
-auth.ts
-└── socialProviders.google.getUserInfo()
-      └── isEmailAllowed(profile.email)
+features/auth/lib/auth.ts
+└── user.validateUserInfo({ user })
+      └── isEmailAllowed(user.email)
 ```
-It validates the Google account against the shared allowlist (email + domain) before returning a user.
+It validates the Google account against the shared allowlist (email + domain) before a session is created. On rejection it returns (rather than throws) an error object:
+```typescript
+return {
+  error: AUTH_ERROR.ACCESS_DENIED,          // 'AccessDenied'
+  errorDescription: B_STATUS_CODES.FORBIDDEN, // 'FORBIDDEN'
+}
+```
 
-> `getUserInfo` is the [documented Better Auth hook](https://better-auth.com/docs/concepts/oauth) for rejecting sign-in before a session exists. `mapProfileToUser` cannot reject sign-in (mapping only), and `databaseHooks.user.create.before` only fires on first-time signup — neither covers repeat sign-ins by an already-known user, which is why authorization lives here.
+> `validateUserInfo` is Better Auth's provisioning gate. It runs on every OAuth path that would produce a session — first-time signup (`create-user`), repeat sign-in by a known user (`sign-in`), and account linking (`link-account`) — so it covers the cases that `mapProfileToUser` (mapping only, cannot reject) and `databaseHooks.user.create.before` (first-time signup only) don't. It also fails closed: if the callback throws, Better Auth rejects the sign-in.
 
 Example flow:
 ```text
@@ -85,8 +97,8 @@ isEmailAllowed(email)
  Allowed     Denied
     │           │
     ▼           ▼
-Continue    Throw AccessDenied
-Login       Error
+Continue    Return { error: 'AccessDenied' }
+Login       (Better Auth throws 403 APIError)
 ```
 
 #### Why validate here?
@@ -106,32 +118,31 @@ Authenticate ⟶ Create Session ⟶ Check Authorization ⟶ Logout
 ```
 
 ### 4. Handling Access Denied Errors
-**Better Auth** errors are handled in:
-```text
-/api/auth/[...all]/route.ts
-```
-Instead of directly exporting the original Better Auth GET and POST handlers:
+`/api/auth/[...all]/route.ts` exports the stock Better Auth handlers with no custom error handling:
 ```typescript
 export const { GET, POST } = toNextJsHandler(auth)
 ```
-These handlers are wrapped to intercept authorization errors — both as a thrown `APIError` and as a pre-serialized `403` response, since Better Auth doesn't guarantee which form an internal rejection arrives in. This keeps:
-- authorization logic in `auth.ts`
-- redirect behavior in the API route handler
+When `validateUserInfo()` rejects, Better Auth throws a `FORBIDDEN` `APIError` whose `code` is `AccessDenied`. Its OAuth callback catches that error and redirects to the `errorCallbackURL` passed by the client in step 1, appending `error` / `error_description` query params. This keeps:
+- authorization logic in `features/auth/lib/auth.ts`
+- redirect target in the auth client (`features/auth/lib/client.ts`)
 
 Flow:
 ```text
-getUserInfo()
+validateUserInfo()
       |
       ▼
-throw APIError(FORBIDDEN)  ── or ──  response.status === 403
+return { error: 'AccessDenied' }
       |
       ▼
-route.ts catches either case
+Better Auth OAuth callback ⟶ APIError(FORBIDDEN)
       |
       ▼
-Redirect user
+Redirect to errorCallbackURL
 /auth/error?error=AccessDenied
 ```
+
+> [!IMPORTANT]
+> The redirect target comes from `errorCallbackURL`. A sign-in started without it (e.g. not via `signIn()` in `lib/client.ts`) falls back to Better Auth's default error page (`<baseURL>/error`) instead of `/auth/error`.
 
 ### 5. Successful Authentication - Session Creation
 If the Google account is allowed, the **session** becomes the source of truth for future requests.
@@ -151,7 +162,7 @@ User Authenticated
 ## 🟢 Protected Route Handling
 > 💡 Protected routes are enforced in `proxy.ts`
 
-The proxy checks every incoming request.
+The proxy checks every incoming request with `RouteHandler.isPrivateRoute(pathname)` (from `@/lib/routes`).
 ```text
 Request
    ⭣
@@ -168,12 +179,14 @@ Is this a private route?
 
 >💡 **Note on proxy scope:** `proxy.ts` performs a full session decode + allowlist check on every private-route request, rather than a lightweight cookie-existence check. This is intentional: `getAuthSession()` reads only the signed session cookie — no DB or store lookup — so the per-request cost stays low enough to justify the stronger guarantee (a user removed from the allowlist loses access on their *next* request, not just their next login). If `getAuthSession()` ever starts hitting a DB/session store, this tradeoff should be revisited.
 
+App routes that serve LLMs content (`/llms.txt`, `/llms-full.txt`, `/llms.mdx`) also checks the session for auth independent of `proxy.ts`.
+
 ### No Session
 If the user is not authenticated:
 ```text
 /private-route
       ⭣
-/auth/signin?callbackUrl=/private-route
+/auth/signin?code=signin&callbackURL=/private-route
 ```
 
 ### Invalid Authorization
@@ -200,18 +213,35 @@ isActiveUserAllowed(session)
 
 ### Private Routes
 
-Private routes are defined centrally in the following files:
-- `/lib/shared/constants.ts`
-- `/lib/shared.ts`
+Private routes are defined centrally in `/lib/routes/routes.ts`:
+- `SECTIONS` — the docs sections (folder names under `content/docs`)
+- `PRIVATE_SECTIONS` — sections that are private, along with every route under them (currently `secrets`, `stats-calculator`)
+- `PRIVATE_ROUTES` — derived from `PRIVATE_SECTIONS`. Each section expands to its `/docs/<section>` and `/llms.mdx/<section>` forms, plus the `.mdx` variant of each.
+
+`/lib/routes/index.ts` exports `RouteHandler`, a `RouteUtil` instance (`/lib/routes/routeUtil.ts`) built from `PRIVATE_ROUTES`. Its `isPrivateRoute(pathname)` is the single private-route check, used by:
+- `proxy.ts` — request protection
+- `lib/sourceBuilder.tsx` — splitting the docs source into public and private content (`publicSource` uses `buildCustomSource({ isPrivate: false })`)
+
+Before matching, `isPrivateRoute()` normalizes `/llms.mdx/...` paths and `.mdx` suffixes to the canonical `/docs/...` form. A route is private when its canonical path equals a private prefix or falls under one, and it is not a public exception.
+
+### Public Exceptions
+
+`PUBLIC_EXCEPTIONS` in `/lib/routes/routes.ts` lists exact canonical paths that stay public inside an otherwise private section. Write them in canonical form only, with no `/llms.mdx` prefix or `.mdx` suffix:
+```text
+/docs/secrets
+/docs/secrets/skill-tips
+```
 
 ### Public Routes
 
-All routes not listed in `PRIVATE_ROUTES` remain publicly accessible eg.,
+All routes outside `PRIVATE_SECTIONS`, plus the `PUBLIC_EXCEPTIONS`, remain publicly accessible eg.,
 ```text
 /
+/docs
 /docs/characters
 /docs/weapons
-/docs
+/docs/secrets             (public exception)
+/docs/secrets/skill-tips  (public exception)
 ```
 > A user who fails authentication can still browse public content.
 
@@ -223,35 +253,43 @@ All routes not listed in `PRIVATE_ROUTES` remain publicly accessible eg.,
 Responsibility:
 - Single source of truth for the allowlist: checks email + domain
 - Normalizes input (lowercase/trim) internally — callers pass raw values
-- Called from both `auth.ts` (pre-session) and `session.ts` (post-session)
+- Called from both `features/auth/lib/auth.ts` (pre-session) and `lib/session.ts` (post-session)
 
-### `/lib/auth.ts`
+### `/features/auth/lib/auth.ts`
 
 Responsibility:
 - Configure **Better Auth**
 - Configure Google OAuth
-- Retrieve Google profile
-- Call `isEmailAllowed()`; reject unauthorized users
+- Call `isEmailAllowed()` in `user.validateUserInfo()`; reject unauthorized users
 
 Should NOT handle:
 - route redirects
 - page rendering
 - middleware logic
 
+> `/lib/auth.ts` only re-exports `auth` from `@/features/auth`, since Better Auth's tooling expects a `lib/auth.ts` file. Don't add config there.
+
+### `/features/auth/lib/client.ts`
+
+Responsibility:
+- Create the Better Auth client
+- Expose `signIn()` / `signOut()`
+- Set `errorCallbackURL` so rejected sign-ins land on `/auth/error?error=AccessDenied`
+
 ### `/api/auth/[...all]/route.ts`
 
 Responsibility:
-- Expose Better Auth API routes
-- Convert authentication errors into application redirects
+- Expose Better Auth API routes (`toNextJsHandler(auth)`)
 
 Should NOT handle:
 - user authorization rules
 - route protection
+- error redirects (handled by Better Auth + `errorCallbackURL`)
 
 ### `proxy.ts`
 
 Responsibility:
-- Protect private routes
+- Protect private routes (via `RouteHandler.isPrivateRoute()`)
 - Redirect unauthenticated users
 - Call `isActiveUserAllowed()` for session authorization
 
@@ -290,19 +328,20 @@ Potential expansions could use:
 
 ### B. Supporting additional OAuth providers
 
-- Add another provider in `auth.ts`.
+- Add another provider under `socialProviders` in `features/auth/lib/auth.ts`.
 - Example: google, github, microsoft
 
-Each provider should implement the same authorization rule via `isEmailAllowed()`:
+No per-provider authorization code is needed: `user.validateUserInfo()` is global, so every provider's profile goes through the same `isEmailAllowed()` rule:
 ```text
 Provider Profile
         |
         ▼
-isEmailAllowed(profile.email)?
+validateUserInfo ⟶ isEmailAllowed(user.email)?
         |
         ▼
 Create Session
 ```
+Make sure the client's sign-in call for the new provider also passes `errorCallbackURL`.
 
 ## 🟢 Important Design Decisions
 
@@ -319,6 +358,9 @@ Avoid:
 Authenticate ⟶ Create Session ⟶ Check Authorization ⟶ Logout
 ```
 
+### Why `validateUserInfo` instead of a custom `getUserInfo`?
+Earlier versions overrode the Google provider's `getUserInfo()` to fetch the profile manually and throw an `APIError`, which required a wrapper around the `/api/auth` route handlers to turn that error (sometimes thrown, sometimes a serialized `403`) into a redirect. `validateUserInfo` is Better Auth's built-in gate: it is provider-agnostic, runs on signup, sign-in and account linking, and its rejections are redirected by Better Auth itself — so both the custom profile fetch and the route wrapper were removed.
+
 ### Why keep authorization checks in proxy.ts?
 
 Even though OAuth validation already exists, `proxy.ts`:
@@ -327,17 +369,18 @@ Even though OAuth validation already exists, `proxy.ts`:
 - provides centralized route protection
 
 ### Why one shared `isEmailAllowed()` instead of two separate checks?
-`auth.ts` and `session.ts` previously implemented the allowlist independently, which let their empty-list ("no restriction set") behavior silently diverge. A single shared function, called from both layers, guarantees they can't drift out of sync again.
+The Better Auth config and `session.ts` previously implemented the allowlist independently, which let their empty-list ("no restriction set") behavior silently diverge. A single shared function, called from both layers, guarantees they can't drift out of sync again.
 
 
 ## 🟢 Developer Checklist
 
 When modifying authentication:
 
-- [ ] Update `auth.ts` for identity/provider changes
-- [ ] Update `isEmailAllowed()` in `lib/utils.ts` - `ALLOWED_EMAILS` .env variable for allowlist rules
-- [ ] Update `route.ts` for auth error handling
-- [ ] Update `proxy.ts` for protected routes
-- [ ] Update `lib/constants.ts` -> `privateRoutes` with new private/protected routes
+- [ ] Update `features/auth/lib/auth.ts` for identity/provider changes (not `lib/auth.ts`, which is a re-export)
+- [ ] Update `isEmailAllowed()` in `lib/utils.ts` - `ALLOWED_EMAILS` / `ALLOWED_EMAIL_DOMAINS` .env variables for allowlist rules
+- [ ] Update `errorCallbackURL` in `features/auth/lib/client.ts` for auth error redirects
+- [ ] Update `lib/routes/routes.ts`: add new sections to `SECTIONS` / `PRIVATE_SECTIONS`, and add public carve-outs to `PUBLIC_EXCEPTIONS` (`proxy.ts` and the docs source pick these up automatically)
+- [ ] Add new sections to `CATEGORY` / `getSection()` in `lib/source/navigation.ts`
 - [ ] Keep public routes accessible
 - [ ] Never expose protected pages only through client-side checks
+- [ ] Verify that `/llms.txt`, `/llms-full.txt` and `/llms.mdx` properly exposes public/private content

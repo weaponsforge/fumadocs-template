@@ -4,7 +4,6 @@ import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons'
 import { docs } from 'collections/server'
 
 import { docsRoute } from '@/lib/constants'
-import { PRIVATE_ROUTES } from '@/lib/shared'
 import { buildCustomSource } from '@/lib/sourceBuilder'
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
@@ -17,7 +16,7 @@ export const source = loader({
 
 // All docs sources excluding those in the private routes
 export const publicSource = loader(buildCustomSource({
-  excludedRoutes: PRIVATE_ROUTES,
+  isPrivate: false,
 }), {
   baseUrl: 'docs',
 })
