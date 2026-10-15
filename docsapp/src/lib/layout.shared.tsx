@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { SignOutLink } from '@/features/auth'
 
 import { appName } from './constants'
-import { gitConfig } from './constants'
+import { gitConfig, GOOGLE_AUTH_CONFIGURED } from './constants'
 
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 
@@ -16,10 +16,11 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
  */
 export function baseOptions(): BaseLayoutProps {
   const isGitHub = process.env.GH_USERNAME && process.env.GH_REPOSITORY
-  const githubRepoUrl = isGitHub ? `${gitConfig.repo}` : ''
+  const githubUrl = isGitHub ? gitConfig.repo : undefined
+  const showAuthWidget = GOOGLE_AUTH_CONFIGURED
 
   return {
-    githubUrl: githubRepoUrl,
+    githubUrl,
     nav: {
       title: (
         <>
@@ -36,12 +37,14 @@ export function baseOptions(): BaseLayoutProps {
     },
     // see https://fumadocs.dev/docs/ui/navigation/links
     // session is resolved client-side so layouts remain statically rendered
-    links: [
-      {
-        type: 'custom',
-        children: <SignOutLink />,
-        secondary: true,
-      },
-    ],
+    links: showAuthWidget
+      ? [
+        {
+          type: 'custom',
+          children: <SignOutLink />,
+          secondary: true,
+        },
+      ]
+      : [],
   }
 }
