@@ -5,7 +5,7 @@ This is a Next.js (App Router) application generated with
 
 It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
 
-The app makes extensive use of the **Next.js App Router**, **React Server Components** (pages, layouts, and route handlers render and load content on the server; `"use client"` is limited to interactive UI), and **Next.js middleware** (`/docsapp/src/proxy.ts`, which Next.js 16 renamed from `middleware.ts`), which handles auth gating and markdown/LLM URL rewrites.
+The app makes extensive use of the **Next.js App Router**, **React Server Components** (pages, layouts, and route handlers render and load content on the server; `"use client"` is limited to interactive UI), and **Next.js 16's proxy** convention (`/docsapp/src/proxy.ts`, renamed from `middleware.ts`), which handles auth gating and markdown/LLM URL rewrites.
 
 > [!TIP]
 > Next.js application code and workflow ([AGENTS.md](/docsapp/AGENTS.md)) documentation lives in `docsapp/`.<br>
