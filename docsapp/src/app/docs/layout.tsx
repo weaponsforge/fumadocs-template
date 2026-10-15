@@ -7,7 +7,7 @@ import { baseOptions } from '@/lib/layout.shared'
 import { source } from '@/lib/source'
 
 export default async function Layout({ children }: LayoutProps<'/docs'>) {
-  const base = await baseOptions()
+  const base = baseOptions()
 
   return (
     <DocsLayout

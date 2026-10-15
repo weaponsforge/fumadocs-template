@@ -1,8 +1,14 @@
-import { Session } from '@/lib/session'
+'use client'
 
 import SignOutButton from './SignOutButton'
+import { useSession } from '../lib/client'
 
-export default async function SignOutLink({ session }: { session: Session }) {
+/**
+ * Resolves the session on the client so layouts stay static
+ */
+export default function SignOutLink() {
+  const { data: session } = useSession()
+
   if (!session) {
     return null
   }
