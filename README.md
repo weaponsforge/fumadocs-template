@@ -90,7 +90,9 @@ Open http://localhost:3000 with your browser to see the result.
            ├── demo.mdx       # Sub-page
            └── intro.mdx      # Sub-page
    ```
-3. Register its route name under `SECTIONS` in `/lib/routes/routes.ts`
+3. Register its route name (eg., `<>new-category`) `SECTIONS` in `/lib/routes/routes.ts`.
+
+   > **INFO**: Route names correspond to its folder name under `/content/docs`
 
    ```ts
    // Corresponds to the main documentation sections (folder names)
