@@ -33,7 +33,6 @@ export const sectionRoutes = (section: string): string[] => {
     `/${DOCS_ROUTE_SEGMENT}/${section}`,
     `/${DOCS_ROUTE_SEGMENT}/${section}.mdx`,
     `/${LLMS_MDX_ROUTE_SEGMENT}/${section}`,
-    `/${LLMS_MDX_ROUTE_SEGMENT}/${section}.mdx`,
   ]
 }
 

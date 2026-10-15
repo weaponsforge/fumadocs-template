@@ -4,7 +4,6 @@ import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons'
 import { docs } from 'collections/server'
 
 import { docsRoute } from '@/lib/constants'
-import { PRIVATE_ROUTES } from '@/lib/routes'
 import { buildCustomSource } from '@/lib/sourceBuilder'
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
