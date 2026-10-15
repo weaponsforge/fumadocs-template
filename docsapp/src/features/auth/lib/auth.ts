@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { betterAuth } from 'better-auth'
 
 import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
