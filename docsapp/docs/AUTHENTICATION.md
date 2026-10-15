@@ -9,7 +9,7 @@ The authentication system is designed around a layered approach:
 - **`isEmailAllowed()`** is the single allowlist check (email + domain), used by both layers below.
 - **`user.validateUserInfo()`** calls it to perform authorization before session creation.
 - **Better Auth's OAuth callback** redirects rejected sign-ins to the `errorCallbackURL` set by the auth client.
-- **`proxy.ts`** calls it again via `isActiveUserAllowed()` to protect private routes (defense-in-depth).
+- **`proxy.ts`** (Next.js middleware, renamed from `middleware.ts` in Next.js 16) calls it again via `isActiveUserAllowed()` to protect private routes (defense-in-depth).
 > [!NOTE]
 > The main goal is:
 > Authenticate users securely while ensuring only approved Google accounts can access protected application features.
@@ -160,7 +160,7 @@ User Authenticated
 ```
 ---
 ## 🟢 Protected Route Handling
-> 💡 Protected routes are enforced in `proxy.ts`
+> 💡 Protected routes are enforced in `proxy.ts`, the Next.js middleware that runs before App Router pages, Server Components, and route handlers render.
 
 The proxy checks every incoming request with `RouteHandler.isPrivateRoute(pathname)` (from `@/lib/routes`).
 ```text
@@ -179,7 +179,7 @@ Is this a private route?
 
 >💡 **Note on proxy scope:** `proxy.ts` performs a full session decode + allowlist check on every private-route request, rather than a lightweight cookie-existence check. This is intentional: `getAuthSession()` reads only the signed session cookie — no DB or store lookup — so the per-request cost stays low enough to justify the stronger guarantee (a user removed from the allowlist loses access on their *next* request, not just their next login). If `getAuthSession()` ever starts hitting a DB/session store, this tradeoff should be revisited.
 
-App routes that serve LLMs content (`/llms.txt`, `/llms-full.txt`, `/llms.mdx`) also checks the session for auth independent of `proxy.ts`.
+App Router route handlers that serve LLMs content (`/llms.txt`, `/llms-full.txt`, `/llms.mdx`) also check the session on the server, independent of `proxy.ts`.
 
 ### No Session
 If the user is not authenticated:
