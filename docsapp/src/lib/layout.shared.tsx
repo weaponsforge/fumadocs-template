@@ -1,29 +1,26 @@
 import Image from 'next/image'
 
-import { getAuthSession } from '@/lib/session'
-
 import { SignOutLink } from '@/features/auth'
 
 import { appName } from './constants'
-import { gitConfig } from './constants'
+import { gitConfig, GOOGLE_AUTH_CONFIGURED } from './constants'
 
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 
 /**
  * Shared layout configurations
  *
- * you can customise layouts individually from:
+ * You can customise layouts individually from:
  * Home Layout: app/(home)/layout.tsx
  * Docs Layout: app/docs/layout.tsx
  */
-export async function baseOptions(): Promise<BaseLayoutProps> {
-  const session = await getAuthSession()
-
+export function baseOptions(): BaseLayoutProps {
   const isGitHub = process.env.GH_USERNAME && process.env.GH_REPOSITORY
-  const githubRepoUrl = isGitHub ? `${gitConfig.repo}` : ''
+  const githubUrl = isGitHub ? gitConfig.repo : undefined
+  const showAuthWidget = GOOGLE_AUTH_CONFIGURED
 
   return {
-    githubUrl: githubRepoUrl,
+    githubUrl,
     nav: {
       title: (
         <>
@@ -39,14 +36,15 @@ export async function baseOptions(): Promise<BaseLayoutProps> {
       ),
     },
     // see https://fumadocs.dev/docs/ui/navigation/links
-    ...(session && {
-      links: [
+    // session is resolved client-side so layouts remain statically rendered
+    links: showAuthWidget
+      ? [
         {
           type: 'custom',
-          children: <SignOutLink session={session} />,
+          children: <SignOutLink />,
           secondary: true,
         },
-      ],
-    }),
+      ]
+      : [],
   }
 }

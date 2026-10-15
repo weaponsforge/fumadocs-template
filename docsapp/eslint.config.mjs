@@ -56,7 +56,18 @@ const eslintConfig = defineConfig([
       'no-restricted-imports': [
         'error',
         {
-          'patterns': ['@/features/*/*'],
+          patterns: [
+            {
+              // Import a feature via its barrel; <name>/server is the only
+              // allowed deep path (server-only code, never client/edge).
+              group: [
+                '@/features/*/*',
+                '!@/features/*/server',
+              ],
+              message:
+                'Import a feature via its barrel (@/features/<name>), or <name>/server for server-only code.',
+            },
+          ],
         },
       ],
       'import/order': [

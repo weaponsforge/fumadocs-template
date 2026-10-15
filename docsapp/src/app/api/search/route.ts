@@ -1,6 +1,6 @@
 import { createFromSource } from 'fumadocs-core/search/server'
 
-import { getAuthSession } from '@/lib/session'
+import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
 import { publicSource, source } from '@/lib/source'
 
 const IS_BUILD_STATIC = process.env.IS_BUILD_STATIC === '1'
@@ -8,7 +8,7 @@ const IS_BUILD_STATIC = process.env.IS_BUILD_STATIC === '1'
 export async function GET(req: Request) {
   const session = await getAuthSession()
 
-  const docSource = session
+  const docSource = isActiveUserAllowed(session)
     ? source
     : publicSource
 

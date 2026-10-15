@@ -1,7 +1,7 @@
 import { useSearchParams } from 'next/navigation'
 
 import errorData from '../data/authData.json'
-import { AUTH_CODE, AUTH_QUERY } from '../utils/constants'
+import { AUTH_CODE, AUTH_ERROR, AUTH_QUERY } from '../utils/constants'
 
 const ERR_DEFAULT = 'defaultValue'
 
@@ -44,5 +44,6 @@ export const useAuthError = () => {
     errorCode: message?.title ?? '-',
     errorInfo: message?.info ?? '-',
     callbackURL: queryCallbackURL,
+    isAccessDenied: queryError === AUTH_ERROR.ACCESS_DENIED,
   }
 }

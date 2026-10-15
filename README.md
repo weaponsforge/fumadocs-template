@@ -166,8 +166,9 @@ Open http://localhost:3000 with your browser to see the result.
 
 In the project, you can see:
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+- `lib/source.ts`: Code for docs content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
+- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep. Kept synchronous so layouts render statically — the signed-in user's sign-out widget resolves its session client-side via `useSession()`.
+- `features/auth`: Auth feature. Import client/shared code from `@/features/auth` and the server-only Better Auth instance from `@/features/auth/server`. See [AUTHENTICATION.md](/docs/AUTHENTICATION.md) for the full flow.
 
 | Route                     | Description                                            |
 | ------------------------- | ------------------------------------------------------ |

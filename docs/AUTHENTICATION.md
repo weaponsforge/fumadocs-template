@@ -209,6 +209,30 @@ isActiveUserAllowed(session)
         /auth/error?error=AccessDenied
 ```
 
+## 🟢 Session in the UI (Client-side)
+
+Shared layouts (`lib/layout.shared.tsx` ⟶ `app/(home)/layout.tsx`, `app/docs/layout.tsx`) do **not** read the session on the server. Calling `getAuthSession()` there reads request headers, which forces every page into dynamic rendering.
+
+Instead, the sign-out widget resolves the session in the browser:
+```text
+baseOptions()  (sync, no session)
+      |
+      ▼
+<SignOutLink />  ('use client')
+      |
+      ▼
+useSession()  ⟶  /api/auth/get-session
+      |
+      ├── pending   ⟶ fixed-height placeholder (avoids nav shift)
+      ├── no session ⟶ render nothing
+      └── session   ⟶ <SignOutButton> with email + avatar
+```
+- `useSession` comes from the Better Auth **React** client (`better-auth/react`) in `features/auth/lib/client.ts`.
+- The widget is only mounted when `GOOGLE_AUTH_CONFIGURED` is true.
+- This is a **display concern only**. Access control still happens server-side in `proxy.ts` and the route handlers — never gate content with `useSession()`.
+
+> Keep `baseOptions()` and the layouts synchronous and free of `headers()` / `cookies()` / `getAuthSession()` calls, or the layouts become dynamic again. Pages that genuinely need the session server-side (e.g. `app/(home)/page.tsx`) can still call `getAuthSession()` directly.
+
 ## 🟢 Route Protection Configuration
 
 ### Private Routes
@@ -267,14 +291,28 @@ Should NOT handle:
 - page rendering
 - middleware logic
 
-> `/lib/auth.ts` only re-exports `auth` from `@/features/auth`, since Better Auth's tooling expects a `lib/auth.ts` file. Don't add config there.
+> `/lib/auth.ts` only re-exports `auth` from `@/features/auth/server`, since Better Auth's tooling expects a `lib/auth.ts` file. Don't add config there.
+
+### `/features/auth` entrypoints
+
+| Import from | Contains | Use in |
+| --- | --- | --- |
+| `@/features/auth` | UI components, `signIn` / `signOut`, constants | client & shared code |
+| `@/features/auth/server` | `auth` instance, routing constants | server code only (`proxy.ts`, `lib/auth.ts`) |
+
+`features/auth/lib/auth.ts` imports `server-only`, so pulling it into a client bundle fails the build. Never re-export `auth` from the client barrel.
 
 ### `/features/auth/lib/client.ts`
 
 Responsibility:
-- Create the Better Auth client
-- Expose `signIn()` / `signOut()`
+- Create the Better Auth React client (`better-auth/react`)
+- Expose `signIn()` / `signOut()` / `useSession()`
 - Set `errorCallbackURL` so rejected sign-ins land on `/auth/error?error=AccessDenied`
+
+### `/features/auth/components/SignOutButtonWrapper.tsx` (`SignOutLink`)
+
+Responsibility:
+- Client component that reads the session via `useSession()` and renders the sign-out button (see [Session in the UI](#-session-in-the-ui-client-side))
 
 ### `/api/auth/[...all]/route.ts`
 
@@ -377,6 +415,8 @@ The Better Auth config and `session.ts` previously implemented the allowlist ind
 When modifying authentication:
 
 - [ ] Update `features/auth/lib/auth.ts` for identity/provider changes (not `lib/auth.ts`, which is a re-export)
+- [ ] Import server-only auth code from `@/features/auth/server`, never from the client barrel `@/features/auth`
+- [ ] Keep shared layouts static: read the session in UI via `useSession()`, not `getAuthSession()`
 - [ ] Update `isEmailAllowed()` in `lib/utils.ts` - `ALLOWED_EMAILS` / `ALLOWED_EMAIL_DOMAINS` .env variables for allowlist rules
 - [ ] Update `errorCallbackURL` in `features/auth/lib/client.ts` for auth error redirects
 - [ ] Update `lib/routes/routes.ts`: add new sections to `SECTIONS` / `PRIVATE_SECTIONS`, and add public carve-outs to `PUBLIC_EXCEPTIONS` (`proxy.ts` and the docs source pick these up automatically)
