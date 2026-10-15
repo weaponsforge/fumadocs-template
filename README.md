@@ -5,7 +5,11 @@ This is a Next.js (App Router) application generated with
 
 It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
 
-> Next application code lives inside the `/docsapp/src` directory.
+The app makes extensive use of the **Next.js App Router**, **React Server Components** (pages, layouts, and route handlers render and load content on the server; `"use client"` is limited to interactive UI), and **Next.js middleware** (`/docsapp/src/proxy.ts`, which Next.js 16 renamed from `middleware.ts`), which handles auth gating and markdown/LLM URL rewrites.
+
+> [!TIP]
+> Next.js application code and workflow ([AGENTS.md](/docsapp/AGENTS.md)) documentation lives in `docsapp/`.<br>
+> Developer guides live in `docs/`: [AUTHENTICATION.md](/docs/AUTHENTICATION.md) (auth architecture and route protection) and [GOOGLE_OAUTH.md](/docs/GOOGLE_OAUTH.md) (Google OAuth client setup).
 
 ### 🎬 Demo
 
@@ -15,7 +19,8 @@ https://fumadocs-template-ten.vercel.app/
 
 - [Fumadocs](https://www.fumadocs.dev/) basic setup
 - Public docs pages
-- Private docs pages gated by Google sign-in (via Google OAuth)
+- Private docs pages gated by Google sign-in (via Google OAuth), enforced in Next.js middleware (`proxy.ts`)
+- Next.js App Router with React Server Components
 - Docker setup for local development and production deployment outside Vercel
 - ESLint setup
 
