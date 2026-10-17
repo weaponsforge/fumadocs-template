@@ -18,7 +18,8 @@ export const source = loader({
 export const publicSource = loader(buildCustomSource({
   isPrivate: false,
 }), {
-  baseUrl: 'docs',
+  baseUrl: docsRoute,
+  plugins: [lucideIconsPlugin()],
 })
 
 /**

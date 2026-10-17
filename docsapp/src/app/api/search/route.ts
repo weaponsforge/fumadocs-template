@@ -1,5 +1,6 @@
 import { createFromSource } from 'fumadocs-core/search/server'
 
+import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
 import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
 import { getSource } from '@/lib/source'
 
@@ -9,7 +10,7 @@ export async function GET(req: Request) {
   const session = await getAuthSession()
 
   const docSource = getSource({
-    isPrivate: isActiveUserAllowed(session),
+    isPrivate: !GOOGLE_AUTH_CONFIGURED || isActiveUserAllowed(session),
   })
 
   // https://docs.orama.com/docs/orama-js/supported-languages
