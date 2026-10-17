@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import { docsLlms } from '@/lib/llms'
 import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
-import { publicSource, source } from '@/lib/source'
+import { getSource, source } from '@/lib/source'
 
 export const revalidate = false
 
@@ -11,7 +11,10 @@ export async function GET(_req: NextRequest, { params }: RouteContext<'/llms.mdx
   const slug = (await params).slug
   const session = await getAuthSession()
 
-  const docSource = isActiveUserAllowed(session) ? source : publicSource
+  const docSource = getSource({
+    isPrivate: isActiveUserAllowed(session),
+  })
+
   const page = docSource.getPage(slug)
 
   if (!page) notFound()
