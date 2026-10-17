@@ -18,11 +18,23 @@ export const source = loader({
 export const publicSource = loader(buildCustomSource({
   isPrivate: false,
 }), {
-  baseUrl: 'docs',
+  baseUrl: docsRoute,
+  plugins: [lucideIconsPlugin()],
 })
 
-export type Meta = (typeof source)['$inferPage'];
-export type Page = (typeof source)['$inferMeta'];
+/**
+ * Returns all docs sources including private ones, or only public sources
+ */
+export const getSource = (
+  { isPrivate = true }: { isPrivate: boolean },
+) => {
+  return isPrivate
+    ? source
+    : publicSource
+}
+
+export type Page = (typeof source)['$inferPage'];
+export type Meta = (typeof source)['$inferMeta'];
 
 export type PageExtended = Page & {
   slugs?: string[] | undefined;

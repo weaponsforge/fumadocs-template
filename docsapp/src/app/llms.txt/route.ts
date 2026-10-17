@@ -1,13 +1,16 @@
+import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
 import { docsLlms } from '@/lib/llms'
-import { getAuthSession } from '@/lib/session'
-import { publicSource, source } from '@/lib/source'
+import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
+import { getSource } from '@/lib/source'
 
 export const revalidate = false
 
 export async function GET() {
   const session = await getAuthSession()
 
-  return session
-    ? new Response(await docsLlms(source).index())
-    : new Response(await docsLlms(publicSource).index())
+  const docSource = getSource({
+    isPrivate: !GOOGLE_AUTH_CONFIGURED || isActiveUserAllowed(session),
+  })
+
+  return new Response(await docsLlms(docSource).index())
 }
