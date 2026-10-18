@@ -179,7 +179,7 @@ Is this a private route?
 
 >💡 **Note on proxy scope:** `proxy.ts` performs a full session decode + allowlist check on every private-route request, rather than a lightweight cookie-existence check. This is intentional: `getAuthSession()` reads only the signed session cookie — no DB or store lookup — so the per-request cost stays low enough to justify the stronger guarantee (a user removed from the allowlist loses access on their *next* request, not just their next login). If `getAuthSession()` ever starts hitting a DB/session store, this tradeoff should be revisited.
 
-App Router route handlers that serve LLMs content (`/llms.txt`, `/llms-full.txt`, `/llms.mdx`) also check the session on the server, independent of `proxy.ts`.
+App Router route handlers that serve LLMs content (`/llms.txt`, `/llms-full.txt`, `/llms.mdx`) and search (`/api/search`) also check the session on the server, independent of `proxy.ts`. They serve all docs (`source`) when Google OAuth is not configured or the session user is allowed, and only public docs (`publicSource`) otherwise, matching the proxy's open-access behavior.
 
 ### No Session
 If the user is not authenticated:
@@ -396,7 +396,7 @@ Avoid:
 Authenticate ⟶ Create Session ⟶ Check Authorization ⟶ Logout
 ```
 
-### Why `validateUserInfo` instead of a custom `getUserInfo`?
+### Why Better Auth - `validateUserInfo` instead of a custom `getUserInfo`?
 Earlier versions overrode the Google provider's `getUserInfo()` to fetch the profile manually and throw an `APIError`, which required a wrapper around the `/api/auth` route handlers to turn that error (sometimes thrown, sometimes a serialized `403`) into a redirect. `validateUserInfo` is Better Auth's built-in gate: it is provider-agnostic, runs on signup, sign-in and account linking, and its rejections are redirected by Better Auth itself — so both the custom profile fetch and the route wrapper were removed.
 
 ### Why keep authorization checks in proxy.ts?

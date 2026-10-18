@@ -14,11 +14,11 @@ This file gives agents guidance for working with code in this repository.
 
 ## Project overview
 
-A Fumadocs documentation template built on the Next.js App Router, React Server Components, and Next.js middleware, with Google OAuth–gated private sections, LLM-friendly markdown routes, OG image generation, and PWA support. `docsapp/` is the only app; the repo root holds meta files and Docker Compose files. Developer docs live in `docs/`, not to be confused with the site content in `content/docs/`. The `content/docs/` pages are sample MU Online game docs.
+A Fumadocs documentation template built on the Next.js App Router, React Server Components, and Next.js middleware, with Google OAuth–gated private sections, LLM-friendly markdown routes, OG image generation, and PWA support. This directory (`docsapp/`) is the only app and a subfolder of a root project. The root directory holds meta files and the Docker Compose files (`docker-compose.yml`, `docker-compose.prod.yml`, `docker-compose.static.yml`), which aren't visible from here. Developer docs live in `docs/`, not to be confused with the site content in `content/docs/`. The `content/docs/` pages are sample MU Online game docs.
 
 ## Commands
 
-Run from `docsapp/` (npm, Node 24):
+Run npm commands from this directory, `docsapp/`:
 
 ```bash
 npm run dev           # next dev --turbo
@@ -28,11 +28,17 @@ npm run lint          # must pass before committing (CI)
 npm run types:check   # regenerates .source/ (fumadocs-mdx) + next typegen + tsc --noEmit; must pass (CI)
 ```
 
-- No test framework is configured.
-- Docker dev, from the repo root: `docker compose build --no-cache && docker compose up`. On Windows, set `IS_WEBPACK=1` + `WATCHPACK_POLLING=true` for hot reload.
+No test framework is configured.
+
+### Docker (optional)
+
+- Docker is optional. The default local workflow is `npm install` then `npm run dev` in this directory (http://localhost:3000). Docker is an alternative for local development and for production deployments outside Vercel. Its environment variables still come from `.env.local` in this directory.
+- Run `docker compose` commands from the root project directory (the parent of `docsapp/`), not from here. Compose files: `docker-compose.yml` (dev), `docker-compose.prod.yml`, `docker-compose.static.yml`.
+- Docker dev, from the root: `docker compose build --no-cache && docker compose up`. On Windows, set `IS_WEBPACK=1` + `WATCHPACK_POLLING=true` for hot reload.
 
 ## Tech stack
 
+- **Node.js v24+** (the Dockerfile pins `node:24.11.0-alpine`)
 - **Next.js 16** (App Router). Middleware lives in `src/proxy.ts`, Next 16's rename of `middleware.ts`; don't create a `middleware.ts`.
 - **React 19** (Server Components) with **TypeScript** (strict mode)
 - **Fumadocs**: fumadocs-core/ui 16 + fumadocs-mdx 15 (versions pinned)
@@ -54,7 +60,7 @@ npm run types:check   # regenerates .source/ (fumadocs-mdx) + next typegen + tsc
 - MDX in `content/docs/` → `fumadocs-mdx` (runs on postinstall/dev/types:check) generates `.source/` (gitignored, imported as `collections/*`) → loaders in `src/lib/source/index.ts`:
   - `source`: all pages
   - `publicSource`: pages that are not private (filtered by `src/lib/sourceBuilder.tsx` via `RouteHandler.isPrivateRoute`)
-- Aggregate endpoints (`/api/search`, `/llms-full.txt`) pick `source` or `publicSource` depending on whether the session user is allowed. Any new endpoint that lists or aggregates content must do the same, or private content leaks.
+- Aggregate endpoints (`/api/search`, `/llms.txt`, `/llms-full.txt`) pick `source` or `publicSource` depending on whether the session user is allowed. Any new endpoint that lists or aggregates content must do the same, or private content leaks.
 - `/docs/x.mdx` and `Accept: text/markdown` requests are rewritten by `proxy.ts` to `/llms.mdx/[...slug]`. OG images are served at `/og/[...slug]`.
 
 ### Content creation

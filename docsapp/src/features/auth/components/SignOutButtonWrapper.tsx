@@ -7,11 +7,7 @@ import { useSession } from '../lib/client'
  * Resolves the session on the client so layouts stay static
  */
 export default function SignOutButtonWrapper() {
-  const { data: session, isPending } = useSession()
-
-  if (isPending) {
-    return <div aria-hidden className="h-9" />
-  }
+  const { data: session } = useSession()
 
   if (!session) {
     return null
