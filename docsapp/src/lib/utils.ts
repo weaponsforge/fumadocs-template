@@ -112,3 +112,11 @@ export const isGoogleOauthSet = (): boolean => {
   return Boolean(process.env.GOOGLE_CLIENT_ID) &&
     Boolean(process.env.GOOGLE_CLIENT_SECRET)
 }
+
+/**
+ * Converts a section slug to an upper snake case key,
+ * eg. `stats-calculator` → `STATS_CALCULATOR`
+ */
+export const toConstKey = (slug: string) => {
+  return slug.replace(/[^a-zA-Z0-9]+/g, '_').toUpperCase()
+}

@@ -62,7 +62,13 @@ export const buildCustomSource = ({
         }
 
         // Extract private/public items
-        const normalRoute = cleanFilePath.replace(/^\/content|\.[^.\/]+$/g, '')
+        const filePath = cleanFilePath.replace(/^\/content|\.[^.\/]+$/g, '')
+
+        // A folder's index page and meta.json share the folder route,
+        // eg. /docs/secrets/index → /docs/secrets
+        const normalRoute = file.type === 'meta'
+          ? filePath.replace(/\/meta$/, '')
+          : filePath.replace(/\/index$/, '')
 
         return isPrivate
           ? RouteHandler.isPrivateRoute(normalRoute)
