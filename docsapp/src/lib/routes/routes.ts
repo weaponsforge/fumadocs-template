@@ -28,7 +28,7 @@ const sectionRoutes = (section: string): string[] => {
   ]
 }
 
-// Generated from content/docs/ by fumadocs-routes (`npm run routes:generate`).
+// Generated from content/docs/ by fumadocs-routes (`npm run routes:build`).
 // Never edit these lists by hand: set `private` in a
 // folder's meta.json or a page's frontmatter instead.
 const docsRoutes = generatedDocsRoutes
