@@ -3,7 +3,7 @@
 This is a Next.js (App Router) application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs) using the **Next.js: Fumadocs MDX** option.
 
-It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
+It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template with content access control using Google OAuth2 sign-in.
 
 The app makes extensive use of the **Next.js App Router**, **React Server Components** (pages, layouts, and route handlers render and load content on the server; `"use client"` is limited to interactive UI), and **Next.js 16's proxy** convention (`/docsapp/src/proxy.ts`, renamed from `middleware.ts`), which handles auth gating and markdown/LLM URL rewrites.
 
@@ -43,7 +43,7 @@ npm v11.6.1
 - Read the [GOOGLE_OAUTH.md](/docsapp/docs/GOOGLE_OAUTH.md) for more information in setting up Google OAuth for sign-in.
 - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
 - Add the following in your Google Client ID's **Authorized redirect URIs**:
-   - https://<YOUR_DEPLOYED_APP_BASE_URL>/api/auth/callback/google<br>
+   - `https://<YOUR_DEPLOYED_APP_BASE_URL>/api/auth/callback/google`<br>
    - eg., `http://localhost:3000/api/auth/callback/google` (when working in local development)
 
 > [!TIP]
@@ -133,7 +133,7 @@ Open http://localhost:3000 with your browser to see the result.
    This writes `/.source/docs-routes.json`, which `proxy.ts` and the docs source use to gate private routes. It runs automatically on `npm install`, `npm run dev` and `npm run build`. After editing a `private` flag while `npm run dev` is running, either run `npm run routes:build` in another terminal, or restart the dev server, since `npm run dev` regenerates `docs-routes.json` on start. Never edit the generated route lists by hand.
 
    > ⚠️ **INFO**:<br>
-   > `private` flags only gate routes when Google OAuth is configured. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full rules.
+   > `private` flags only gate routes when **Google OAuth2** is configured. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full rules.
 
 <br>
 
