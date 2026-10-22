@@ -22,7 +22,7 @@ Run npm commands from this directory, `docsapp/`:
 
 ```bash
 npm run dev           # next dev --turbo
-npm run build         # production build (also the closest thing to a test)
+npm run build         # production build
 npm run lint:fix      # ESLint autofix (ESLint is the only formatter; no Prettier)
 npm run lint          # must pass before committing (CI)
 npm run types:check   # regenerates .source/ (fumadocs-mdx) + next typegen + tsc --noEmit; must pass (CI)
@@ -30,7 +30,7 @@ npm run routes:build  # regenerates .source/docs-routes.json (fumadocs-routes); 
 npm run routes:check  # same, with --strict; lint/types:check run it first
 ```
 
-No test framework is configured.
+Test commands are under [Testing and verification](#testing-and-verification).
 
 ### Docker (optional)
 
@@ -41,12 +41,14 @@ No test framework is configured.
 ## Tech stack
 
 - **Node.js v24+** (the Dockerfile pins `node:24.11.0-alpine`)
-- **Next.js 16** (App Router). Middleware lives in `src/proxy.ts`, Next 16's rename of `middleware.ts`; don't create a `middleware.ts`.
+- **Next.js 16** (App Router, Server Components, Server Actions). Middleware lives in `src/proxy.ts`, Next 16's rename of `middleware.ts`; don't create a `middleware.ts`.
 - **React 19** (Server Components) with **TypeScript** (strict mode)
 - **Fumadocs**: fumadocs-core/ui 16 + fumadocs-mdx 15 (versions pinned)
+- **TypeScript** (strict mode)
 - **Tailwind CSS 4** (CSS-first in `src/app/global.css`, no tailwind.config) + Lucide icons
 - **Better Auth** with Google OAuth
 - **takumi-js** for OG images
+- **Vitest** for unit tests (pinned to an exact version)
 - **npm** as the package manager
 
 ## Architecture
@@ -83,6 +85,18 @@ No test framework is configured.
 - If `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` are unset, `GOOGLE_AUTH_CONFIGURED` is false and **all private routes are open**. This is the local default.
 - Private images live in `protected/` and are served via `src/app/api/protected-asset/[...path]`. Public assets go in `public/`.
 - When changing auth code (`src/features/auth`, `src/lib/session.ts`, `src/lib/routes/`, `proxy.ts`), update `docs/AUTHENTICATION.md` in the same change.
+
+## Testing and verification
+
+```bash
+npm test              # Vitest unit tests, single run (vitest run)
+npm run test:watch    # Vitest in watch mode
+```
+
+- Vitest (`vitest.config.mts`) runs `src/__tests__/**/*.test.ts` in a Node environment. Test files outside `src/__tests__/` don't run.
+- Test files mirror the path of the code under test, e.g. `src/lib/utils.ts` → `src/__tests__/lib/utils.test.ts`.
+- Tests that import `@/lib/routes` mock `collections/docs-routes.json` with a fixture so they don't depend on `content/docs/`.
+- Before committing, `npm test`, `npm run lint` and `npm run types:check` must pass. Run `npm run build` too when changing routes, config or content loading.
 
 ## Conventions
 
