@@ -1,6 +1,7 @@
 import {
   DOCS_ROUTE_SEGMENT,
   LLMS_MDX_ROUTE_SEGMENT,
+  OG_ROUTE_SG,
 } from './routes'
 import { PRIVATE_PAGES, PUBLIC_EXCEPTIONS } from './routes'
 
@@ -27,9 +28,24 @@ export default class RouteUtil {
     }
 
     if (pathname.startsWith(`/${LLMS_MDX_ROUTE_SEGMENT}/`)) {
-      const subRoute = pathname.slice(`/${LLMS_MDX_ROUTE_SEGMENT}/`.length).replace(/\.mdx$/, '')
+      const subRoute = pathname
+        .slice(`/${LLMS_MDX_ROUTE_SEGMENT}/`.length)
+        .replace(/\.mdx$/, '')
 
       return `/${DOCS_ROUTE_SEGMENT}/${subRoute}`
+    }
+
+    // OG images, eg. /og/secrets/map/image.webp → /docs/secrets/map
+    if (pathname.startsWith(`/${OG_ROUTE_SG}/`)) {
+      const subRoute = pathname
+        .slice(`/${OG_ROUTE_SG}/`.length)
+        .split('/')
+        .slice(0, -1)
+        .join('/')
+
+      return subRoute
+        ? `/${DOCS_ROUTE_SEGMENT}/${subRoute}`
+        : `/${DOCS_ROUTE_SEGMENT}`
     }
 
     return pathname.replace(/\.mdx$/, '')

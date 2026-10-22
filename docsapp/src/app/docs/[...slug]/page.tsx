@@ -13,8 +13,7 @@ import { DocsPageProps } from 'fumadocs-ui/page'
 import { getMDXComponents } from '@/components/mdx'
 
 import { appDescription, appName } from '@/lib/constants'
-import { getPageImageUrl } from '@/lib/metadata'
-import { createMetadata } from '@/lib/metadata'
+import { createMetadata, getPageImageUrl } from '@/lib/metadata'
 import { source } from '@/lib/source'
 
 import type { Metadata } from 'next'
@@ -79,7 +78,7 @@ export async function generateMetadata(
   } = page?.data
 
   const image = {
-    url: getPageImageUrl(page)?.url,
+    url: getPageImageUrl(page).url,
     width: 1200,
     height: 630,
   }
