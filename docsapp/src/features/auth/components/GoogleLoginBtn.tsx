@@ -12,7 +12,7 @@ export default function GoogleSignInButton({ callbackURL }: { callbackURL?: stri
       callback={async () => signIn(callbackURL)}
       styles={{
         container:
-          'flex items-center gap-2 rounded-lg border p-3 text-sm cursor-pointer w-50',
+          'flex items-center gap-2 rounded-lg border p-3 text-sm cursor-pointer w-50 dark:bg-white',
       }}
     />
   )

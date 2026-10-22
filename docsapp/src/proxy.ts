@@ -87,5 +87,8 @@ export default async function proxy(request: NextRequest) {
 export const config = {
   matcher:[
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|bmp|avif|svg|ico|css|js|webp)).*)',
+    // OG images end in .webp (excluded above) but show page titles/descriptions,
+    // so private pages' images are gated like the pages themselves
+    '/og/:path*',
   ],
 }
