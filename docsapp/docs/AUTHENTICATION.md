@@ -223,9 +223,8 @@ baseOptions()  (sync, no session)
       ▼
 useSession()  ⟶  /api/auth/get-session
       |
-      ├── pending   ⟶ fixed-height placeholder (avoids nav shift)
-      ├── no session ⟶ render nothing
-      └── session   ⟶ <SignOutButton> with email + avatar
+      ├── pending or no session ⟶ render nothing
+      └── session               ⟶ <SignOutButton> with email + avatar
 ```
 - `useSession` comes from the Better Auth **React** client (`better-auth/react`) in `features/auth/lib/client.ts`.
 - The widget is only mounted when `GOOGLE_AUTH_CONFIGURED` is true.
@@ -235,30 +234,55 @@ useSession()  ⟶  /api/auth/get-session
 
 ## 🟢 Route Protection Configuration
 
+### Marking content private
+
+Privacy is set in the content itself, never in code:
+- **Folders:** `"private": true` in a folder's `meta.json` makes that folder and everything nested in it private.
+- **Pages:** `private: true` / `private: false` in a page's frontmatter overrides its folder.
+
+Rules:
+1. The **nearest** `meta.json` that explicitly sets `private` wins over its ancestors, e.g. `classes/meta.json: true` + `classes/wizards/meta.json: false` makes `wizards/` public.
+2. A page's frontmatter `private` overrides its folder.
+3. **Only explicitly written values count.** A nested `meta.json` without a `private` key (e.g. one added just for sidebar ordering) inherits from its parent; it does not reset the subtree to public. The zod schemas in `source.config.ts` default `private` to `false` for runtime typing only.
+4. A non-boolean `private` value fails the generator with the file path.
+5. `"private": true` in the root `content/docs/meta.json` makes the whole site private.
+
+Current content: `secrets/` and `stats-calculator/` are private, `secrets/index.mdx` and `secrets/skill-tips.mdx` are public pages inside it, and `characters/(classes)/elf.mdx` is a private page in a public section.
+
+### Generated route lists
+
+The [`fumadocs-routes`](https://github.com/weaponsforge/fumadocs-routes) CLI (dev dependency, run by `npm run routes:build`) reads the raw `meta.json` files and frontmatter under `content/docs` and writes `.source/docs-routes.json` (gitignored, always regenerated). `lib/routes/routes.ts` imports it as `collections/docs-routes.json`:
+- `sections` / `section_labels`: folders served at `/docs/<folder>` (top-level, or inside a top-level `(group)`) whose `meta.json` has `root: true`; nested `root: true` folders are not sections. Labels come from the `meta.json` `description`, else the `index.mdx` `description`, else the slug
+- `private_sections`: URL prefixes of the topmost private non-group folders (can be nested, e.g. `characters/wizards`)
+- `public_exceptions`: exact slugs of public pages under a private prefix
+- `private_pages`: exact slugs of private pages not covered by a private prefix, e.g. a private page in a public section, or pages of a private `(group)` folder (groups add no URL segment, so they can't be prefixes)
+
+It runs automatically on `postinstall` and at the start of `dev`, `build` (covers `docker:build`) and `docker:webpack`. `npm run routes:check` (`--strict`) runs at the start of `lint` and `types:check`; in strict mode a top-level `content/docs` folder without a `meta.json` is an error instead of a warning. Keep `--strict` out of build/deploy scripts.
+
+> 💡 **Dev note:** after editing a `private` flag while `next dev` is running, re-run `npm run routes:build` and Next hot-reloads the JSON, or restart `npm run dev`, which regenerates it on start.
+
 ### Private Routes
 
-Private routes are defined centrally in `/lib/routes/routes.ts`:
-- `SECTIONS` — the docs sections (folder names under `content/docs`)
-- `PRIVATE_SECTIONS` — sections that are private, along with every route under them (currently `secrets`, `stats-calculator`)
-- `PRIVATE_ROUTES` — derived from `PRIVATE_SECTIONS`. Each section expands to its `/docs/<section>` and `/llms.mdx/<section>` forms, plus the `.mdx` variant of each.
+`/lib/routes/routes.ts` imports the generated JSON and exposes:
+- `SECTIONS`, `SECTION_LIST`, `SECTION_LABELS` — the docs sections and their labels (used by `lib/source/navigation.ts`, e.g. for `llms.txt` headings)
+- `PRIVATE_SECTIONS` — private URL prefixes, along with every route under them
+- `PRIVATE_ROUTES` — derived from `PRIVATE_SECTIONS`. Each prefix expands to its `/docs/<prefix>` and `/llms.mdx/<prefix>` forms, plus the `.mdx` variant of each.
+- `PUBLIC_EXCEPTIONS` — exact canonical paths that stay public inside a private prefix, e.g. `/docs/secrets`, `/docs/secrets/skill-tips`
+- `PRIVATE_PAGES` — exact canonical private paths outside the private prefixes, e.g. `/docs/characters/elf`
 
 `/lib/routes/index.ts` exports `RouteHandler`, a `RouteUtil` instance (`/lib/routes/routeUtil.ts`) built from `PRIVATE_ROUTES`. Its `isPrivateRoute(pathname)` is the single private-route check, used by:
 - `proxy.ts` — request protection
-- `lib/sourceBuilder.tsx` — splitting the docs source into public and private content (`publicSource` uses `buildCustomSource({ isPrivate: false })`)
+- `lib/sourceBuilder.tsx` — splitting the docs source into public and private content (`publicSource` uses `buildCustomSource({ isPrivate: false })`). A folder's `index` page and `meta.json` are checked against the folder route.
 
-Before matching, `isPrivateRoute()` normalizes `/llms.mdx/...` paths and `.mdx` suffixes to the canonical `/docs/...` form. A route is private when its canonical path equals a private prefix or falls under one, and it is not a public exception.
+Before matching, `isPrivateRoute()` normalizes `/llms.mdx/...` paths, `.mdx` suffixes and OG image paths (`/og/<slug>/image.webp`) to the canonical `/docs/...` form. A route is private when its canonical path equals a private prefix or falls under one and is not a public exception, or when it is one of the `PRIVATE_PAGES`.
 
-### Public Exceptions
+The proxy never loads the content source: it only reads these generated lists, so its cost doesn't grow with the amount of content, and unknown URLs under a private prefix are gated the same as existing ones (no leaking which private slugs exist).
 
-`PUBLIC_EXCEPTIONS` in `/lib/routes/routes.ts` lists exact canonical paths that stay public inside an otherwise private section. Write them in canonical form only, with no `/llms.mdx` prefix or `.mdx` suffix:
-```text
-/docs/secrets
-/docs/secrets/skill-tips
-```
+OG images (`/og/[...slug]/image.webp`) are prerendered for every page and show its title and description. The proxy matcher skips `.webp` assets, so it has a separate `/og/:path*` entry: a private page's OG image is gated like the page itself (open when Google auth isn't configured), while public ones only cost a string check.
 
 ### Public Routes
 
-All routes outside `PRIVATE_SECTIONS`, plus the `PUBLIC_EXCEPTIONS`, remain publicly accessible eg.,
+All routes outside `PRIVATE_SECTIONS` and `PRIVATE_PAGES`, plus the `PUBLIC_EXCEPTIONS`, remain publicly accessible eg.,
 ```text
 /
 /docs
@@ -419,8 +443,7 @@ When modifying authentication:
 - [ ] Keep shared layouts static: read the session in UI via `useSession()`, not `getAuthSession()`
 - [ ] Update `isEmailAllowed()` in `lib/utils.ts` - `ALLOWED_EMAILS` / `ALLOWED_EMAIL_DOMAINS` .env variables for allowlist rules
 - [ ] Update `errorCallbackURL` in `features/auth/lib/client.ts` for auth error redirects
-- [ ] Update `lib/routes/routes.ts`: add new sections to `SECTIONS` / `PRIVATE_SECTIONS`, and add public carve-outs to `PUBLIC_EXCEPTIONS` (`proxy.ts` and the docs source pick these up automatically)
-- [ ] Add new sections to `CATEGORY` / `getSection()` in `lib/source/navigation.ts`
+- [ ] Set `private` in the folder's `meta.json` or the page's frontmatter (never edit the route lists by hand), then run `npm run routes:build` (`proxy.ts`, the docs source and `lib/source/navigation.ts` pick up the generated lists automatically)
 - [ ] Keep public routes accessible
 - [ ] Never expose protected pages only through client-side checks
-- [ ] Verify that `/llms.txt`, `/llms-full.txt` and `/llms.mdx` properly exposes public/private content
+- [ ] Verify that `/llms.txt`, `/llms-full.txt`, `/llms.mdx` and `/og` properly expose public/private content
