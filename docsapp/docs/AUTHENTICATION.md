@@ -257,7 +257,7 @@ The [`fumadocs-routes`](https://github.com/weaponsforge/fumadocs-routes) CLI (de
 - `public_exceptions`: exact slugs of public pages under a private prefix
 - `private_pages`: exact slugs of private pages not covered by a private prefix, e.g. a private page in a public section, or pages of a private `(group)` folder (groups add no URL segment, so they can't be prefixes)
 
-It runs automatically on `postinstall` and at the start of `dev`, `build` (covers `docker:build`) and `docker:webpack`. `npm run routes:check` (`--strict`) runs at the start of `lint` and `types:check`; in strict mode a top-level `content/docs` folder without a `meta.json` is an error instead of a warning. Keep `--strict` out of build/deploy scripts.
+It runs automatically on `postinstall` and at the start of `dev`, `build` (covers `docker:build`) and `docker:webpack`. `npm run routes:check` (`--strict`) runs at the start of `types:check`, so `npm run verify` runs it too; in strict mode a top-level `content/docs` folder without a `meta.json` is an error instead of a warning. Keep `--strict` out of build/deploy scripts.
 
 > 💡 **Dev note:** after editing a `private` flag while `next dev` is running, re-run `npm run routes:build` and Next hot-reloads the JSON, or restart `npm run dev`, which regenerates it on start.
 

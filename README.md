@@ -3,7 +3,7 @@
 This is a Next.js (App Router) application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs) using the **Next.js: Fumadocs MDX** option.
 
-It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template with content access control using Google OAuth2 sign-in.
+It features basic setup, configurations, sign-in authentication, and tooling to standardize using Fumadocs as a template.
 
 The app makes extensive use of the **Next.js App Router**, **React Server Components** (pages, layouts, and route handlers render and load content on the server; `"use client"` is limited to interactive UI), and **Next.js 16's proxy** convention (`/docsapp/src/proxy.ts`, renamed from `middleware.ts`), which handles auth gating and markdown/LLM URL rewrites.
 
@@ -29,7 +29,7 @@ https://fumadocs-template-ten.vercel.app/
 
 ### 📋 Requirements
 
-#### 1. NodeJS v24
+#### 1. Node.js v24
 
 ```text
 Recommended version (used within this project)
@@ -43,14 +43,26 @@ npm v11.6.1
 - Read the [GOOGLE_OAUTH.md](/docsapp/docs/GOOGLE_OAUTH.md) for more information in setting up Google OAuth for sign-in.
 - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
 - Add the following in your Google Client ID's **Authorized redirect URIs**:
-   - `https://<YOUR_DEPLOYED_APP_BASE_URL>/api/auth/callback/google`<br>
+   - https://<YOUR_DEPLOYED_APP_BASE_URL>/api/auth/callback/google<br>
    - eg., `http://localhost:3000/api/auth/callback/google` (when working in local development)
 
 > [!TIP]
 > Setup required only if you want to enable Google sign-in<br>
-> To allow unrestricted access on all routes, set `matcher: []` in the `/docsapp/src/proxy.ts` file.
+> To allow unrestricted access on all routes, leave `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` unset in `.env.local`. All private routes are then open.
 
 #### 3. Docker (optional)
+
+Dockerfile and compose files are available for running the app using Docker.
+
+<br>
+
+---
+
+### 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+<br>
 
 ## 📖 Run development server
 
@@ -77,14 +89,14 @@ npm run dev
 Open http://localhost:3000 with your browser to see the result.
 
 > [!NOTE]
-> Look over the [Ennvironment Variables](#environment-variables) section for more building and Authentication options.
+> Look over the [Environment Variables](#environment-variables) section for more building and Authentication options.
 
-## ➕ Adding New Content
+## ✍️ Adding New Content
 
-1. Create new `.mdx` files under the existing folders in `/content/docs/<category-folder>`.
+1. Create new `.mdx` files under the existing folders in `/content/docs/<category-folder>`, and list them in the folder's `meta.json` `pages` array if it lists pages explicitly.
 2. Create a new folder `<new-category>` under `/content/docs` to create a new group or category.
 
-   Refer to the patterns under `contents/docs/secrets/` and the [Fumadocs](https://www.fumadocs.dev/docs) documentation for more information.
+   Refer to the patterns under `content/docs/secrets/` and the [Fumadocs](https://www.fumadocs.dev/docs) documentation for more information.
 
 
    ```text
@@ -130,16 +142,10 @@ Open http://localhost:3000 with your browser to see the result.
    npm run routes:build
    ```
 
-   This writes `/.source/docs-routes.json`, which `proxy.ts` and the docs source use to gate private routes. It runs automatically on `npm install`, `npm run dev` and `npm run build`. After editing a `private` flag while `npm run dev` is running, either run `npm run routes:build` in another terminal, or restart the dev server, since `npm run dev` regenerates `docs-routes.json` on start. Never edit the generated route lists by hand.
+   This writes `/.source/docs-routes.json`, which `proxy.ts` and the docs source use to gate private routes. It runs automatically on `npm install`, `npm run dev` and `npm run build`. After editing a `private` flag while `npm run dev` is running, either run `npm run routes:build` in another terminal, or restart the dev server, since `npm run dev` regenerates `docs-routes.json` on start. Never edit the generated route lists by hand. Run `npm run verify` afterwards: it also runs the strict `routes:check`.
 
    > ⚠️ **INFO**:<br>
-   > `private` flags only gate routes when **Google OAuth2** is configured. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full rules.
-
-<br>
-
-## Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+   > `private` flags only gate routes when Google OAuth is configured. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full rules.
 
 <br>
 
@@ -162,7 +168,7 @@ Using Docker
    docker compose up
    ```
 
-Open http://localhost:3000 with your browser to see the result.
+4. Open http://localhost:3000 with your browser to see the result.
 
 ## Explore
 
@@ -172,16 +178,16 @@ Open http://localhost:3000 with your browser to see the result.
 
 In the project, you can see:
 
-- `lib/source.ts`: Code for docs content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep. Kept synchronous so layouts render statically — the signed-in user's sign-out widget resolves its session client-side via `useSession()`.
-- `features/auth`: Auth feature. Import client/shared code from `@/features/auth` and the server-only Better Auth instance from `@/features/auth/server`. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full flow.
+- `src/lib/source/index.ts`: Code for docs content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
+- `src/lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep. Kept synchronous so layouts render statically — the signed-in user's sign-out widget resolves its session client-side via `useSession()`.
+- `src/features/auth`: Auth feature. Import client/shared code from `@/features/auth` and the server-only Better Auth instance from `@/features/auth/server`. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full flow.
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
-| `content/docs/`           | The MDX docs content and `meta.json` files.            |
+| Route                         | Description                                            |
+| ----------------------------- | ------------------------------------------------------ |
+| `src/app/(home)`              | The route group for your landing page and other pages. |
+| `src/app/docs`                | The documentation layout and pages.                    |
+| `src/app/api/search/route.ts` | The Route Handler for search.                          |
+| `content/docs/`               | The MDX docs content and `meta.json` files.            |
 
 ### Fumadocs MDX
 
@@ -202,7 +208,7 @@ resources:
 ## Environment Variables
 
 > [!WARNING]
-> Ensure only one of `IS_BUILD_STATIC` or `IS_BUILD_DOCKER` has a value of `1` to avoid build conflicts.
+> Keep `IS_BUILD_STATIC=0`. `IS_BUILD_STATIC=1` (static export) is not supported: the app relies on Next.js server features (Server Components, middleware, Route Handlers), and a static export has no middleware to gate private pages. References to it will be removed in a future version.
 
 Create a `.env.local` file from the `.env.example` file.
 
@@ -210,12 +216,12 @@ Create a `.env.local` file from the `.env.example` file.
 | --- | --- |
 | GOOGLE_CLIENT_ID | Google OAuth2 client ID linked with your Google Cloud Platform project. |
 | GOOGLE_CLIENT_SECRET | Google OAuth2 client secret associated with the `GOOGLE_CLIENT_ID` |
-| BETTER_AUTH_SECRET | Your nextauth secret (any random string will do) |
+| BETTER_AUTH_SECRET | Better Auth secret used to sign session cookies (any long random string will do) |
 | BETTER_AUTH_URL | Your root domain URL, beginning with `http://` or `https://` protocol. |
-| ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from all **Gmail domains**.</quote> |
+| ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from **all email domains** (any Google account, including Google Workspace domains).</quote> |
 | ALLOWED_EMAILS | Hard-coded list of comma-separated emails allowed to sign-in with Google.<br><quote>Leave it blank or unset if you want to allow sign-in from all **Google accounts**.</quote> |
-| IS_BUILD_DOCKER | If value is `1`, builds the NextJS app for Docker in production using the standalone mode build into the `/docsapp/.next/standalone` and `/docsapp/.next/static` directories. |
-| IS_BUILD_STATIC | If value is `1`, builds and exports the NextJS app into a static build in the `/docsapp/out` directory when running `"npm run build"`<br><br>⚠️ Fumadocs (or any Next.js) app that uses heavy React Server Components (RSC) and Next.js server features will fail to build as a static output. To enable true static export, [adjust necessary settings](https://nextjs.org/docs/app/guides/static-exports) in the `next.config.mjs` file and the overall app before export. |
+| IS_BUILD_DOCKER | If value is `1`, builds the Next.js app for Docker in production using the standalone mode build into the `/docsapp/.next/standalone` and `/docsapp/.next/static` directories. |
+| IS_BUILD_STATIC | **Not supported. Keep it `0`.** Intended to export a static build to `/docsapp/out`, but the app relies on Next.js server features, and a static export has no middleware to gate private pages. Deprecated: references to it will be removed in a future version. |
 | IS_WEBPACK | Set to `1` to run the app in development mode using **Webpack**. <br><br>⭐ **IMPORTANT**: When running the app via **Docker** on Windows OS (`docker compose up`), this must be set to `1` to enable hot reload.|
 | WATCHPACK_POLLING | Set to `true` to enable Webpack-based hot reloading when running the app in Docker on Windows. Required because Turbopack hot reload is currently unreliable in this setup (Docker + Windows). |
 | APP_NAME | Name of your Fumadocs documentation app. Defaults to `"Fumadocs Template"` |
@@ -223,7 +229,96 @@ Create a `.env.local` file from the `.env.example` file.
 | APP_DESCRIPTION | Documentation website short description. Defaults to `"Documentation website demo"` |
 | GH_USERNAME | Your GitHub username |
 | GH_REPOSITORY | GitHub repository containing this documentation app |
-| GH_REPO_DEFAULT_BRANCH | Default branch of the `GH_REPOSITORY`. Defaults to `"main"` |
+| GH_REPO_DEFAULT_BRANCH | Default branch of the `GH_REPOSITORY`. Currently unused by the app (no default). |
+
+## 📜 Available Scripts
+
+These scripts, compatible with running in Node and Docker, run various TypeScript scripts and tests.
+
+<details>
+<summary>👉 Click to expand the list of available scripts</summary>
+
+### `npm start`
+
+Runs the Next.js app in production mode. Requires running `"npm run build"` first, with `IS_BUILD_DOCKER=0`. For a standalone build (`IS_BUILD_DOCKER=1`, the `.env.example` default), run `node .next/standalone/server.js` instead; `next start` doesn't support standalone output.
+
+### `npm test`
+
+Runs the Vitest unit tests once: `*.test.ts` and `*.test.tsx` files in the `docsapp/src/__tests__/` directory.
+
+### `npm run test:watch`
+
+Runs the Vitest unit tests in watch mode.
+
+### `npm run dev`
+
+- Runs the Next.js app in development mode with hot-reload using Turbopack and Node.js.
+- Set `IS_WEBPACK=1` then run `"docker compose up"` to run the Next.js app in development mode with hot-reload using Docker from a Windows host.
+
+### `npm run build`
+
+Builds the Next.js app for production mode.
+
+> ⚠️ **WARNING**: Keep `IS_BUILD_STATIC=0`. `IS_BUILD_STATIC=1` (static export) is not supported: the app relies on Next.js server features (Server Components, middleware, Route Handlers), and a static export has no middleware to gate private pages. References to it will be removed in a future version.
+
+- **Docker standalone mode**<br>
+   When `IS_BUILD_DOCKER=1`: exports the Next.js app (uses App Router) build artifacts to the `/docsapp/.next/standalone` and `/docsapp/.next/static` directories for Docker deployment.
+
+   > ℹ️ **INFO**: See the `"npm run docker:build"` script to build the Next.js app for production mode using Docker (Next.js standalone mode build).
+
+### `npm run lint`
+
+Lints TypeScript source codes and files, checking for linting errors.
+
+### `npm run lint:fix`
+
+Fixes lint errors.
+
+### `npm run types:check`
+
+- Checks for TS type errors. Runs `routes:check` (strict) and `fumadocs-mdx` to regenerate `.source/`, then `next typegen` for Next.js route types, then `tsc --noEmit`.
+
+### `npm run routes:build`
+
+Regenerates `.source/docs-routes.json` (the private route lists) from the `private` flags in `content/docs/` using fumadocs-routes. Runs automatically on `npm install`, `npm run dev` and `npm run build`.
+
+### `npm run routes:check`
+
+Same as `routes:build` in strict mode: a top-level `content/docs` folder without a `meta.json` is an error. Runs as part of `types:check` and `verify`.
+
+### `npm run verify`
+
+Chains `npm run lint` and `npm run types:check` (`routes:check`, `fumadocs-mdx`, `next typegen`, `tsc --noEmit`)
+
+</details>
+<br>
+
+## 📦 Docker Scripts
+
+These scripts are called within the `Dockerfile` for building images.
+
+<details>
+<summary>👉 Click to expand the list of available scripts</summary>
+
+### `npm run docker:webpack`
+
+- Runs the Next.js app in development mode inside Docker using Webpack and Node.js.
+- Requires `IS_WEBPACK=1` in `.env.local`.
+- Uses the `docker-compose.yml` Docker compose file.
+
+> 💡 **NOTE**: To enable hot reloading, set `WATCHPACK_POLLING=true` in `.env.local`. This is required because Turbopack hot reload is not yet reliable for Next.js apps running in Docker on Windows.
+
+### `npm run docker:build`
+
+- Runs `npm run build` with `IS_BUILD_DOCKER=1`, producing a standalone Next.js build. The `Dockerfile` `build` stage calls it; the script itself doesn't build an image.
+- Uses the `docker-compose.prod.yml` Docker compose file.
+
+#### References
+
+- Next (Turbopack) currently doesn't work in Docker <sup>[[1]](https://github.com/ymeskini/ai-app/issues/1)</sup>
+
+</details>
+<br>
 
 ## References
 
