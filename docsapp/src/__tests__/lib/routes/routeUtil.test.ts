@@ -2,16 +2,17 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { PRIVATE_ROUTES, RouteHandler } from '@/lib/routes'
 
-// Fixed privacy lists, so the tests don't depend on the current content/docs/
+import type { IDocsRoutes } from 'fumadocs-routes'
+
+// Use fixed privacy lists, so the tests don't depend on the current content/docs/.
 vi.mock('collections/docs-routes.json', () => ({
   default: {
     sections: ['characters', 'secrets', 'stats-calculator', 'weapons'],
     section_labels: {},
-    // `characters/hidden` is a private folder nested in the public `characters` section
     private_sections: ['characters/hidden', 'secrets', 'stats-calculator'],
     public_exceptions: ['characters/hidden/faq', 'secrets', 'secrets/skill-tips'],
     private_pages: ['characters/elf'],
-  },
+  } satisfies IDocsRoutes,
 }))
 
 describe('PRIVATE_ROUTES', () => {
