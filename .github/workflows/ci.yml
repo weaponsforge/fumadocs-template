@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  lint-client:
+  lint-app:
     name: Lint App Test
     runs-on: ubuntu-latest
     steps:
@@ -24,12 +24,11 @@ jobs:
         run: |
           cd docsapp
           npm ci
-          npm run lint
-          npm run types:check
+          npm run verify
 
   test-app:
     name: Unit Tests
-    needs: lint-client
+    needs: lint-app
     runs-on: ubuntu-latest
     permissions:
       checks: write
