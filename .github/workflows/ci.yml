@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  lint-client:
+  lint-app:
     name: Lint App
     runs-on: ubuntu-latest
     steps:
