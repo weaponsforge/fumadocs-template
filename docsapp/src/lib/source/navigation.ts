@@ -1,22 +1,20 @@
-import { SECTIONS } from '@/lib/routes/routes'
+import {
+  SECTION_LABELS,
+  SECTION_LIST,
+  SECTIONS,
+} from '@/lib/routes/routes'
 
-export const CATEGORY = {
-  [SECTIONS.CHARACTERS]: 'MU Online Characters',
-  [SECTIONS.WEAPONS]: 'MU Online Weapons',
-  [SECTIONS.SECRETS]: 'MU Online Secrets / Tips',
-  [SECTIONS.STATS_CALCULATOR]: 'Character Stats Calculator',
-}
+// Section labels from each section's meta.json (or index.mdx) description,
+// eg. { characters: 'MU Online characters' }
+export const CATEGORY: Record<string, string> = SECTION_LABELS
+
+// Pages outside a known section fall back to this section
+const DEFAULT_SECTION = SECTIONS.CHARACTERS ?? SECTION_LIST[0]
 
 export function getSection(path: string | undefined) {
-  if (!path) return SECTIONS.CHARACTERS
-  const [dir] = path.split('/', 1)
-  if (!dir) return SECTIONS.CHARACTERS
+  const [dir] = path?.split('/', 1) ?? []
 
-  return (
-    {
-      [SECTIONS.WEAPONS]: SECTIONS.WEAPONS,
-      [SECTIONS.SECRETS]: SECTIONS.SECRETS,
-      [SECTIONS.STATS_CALCULATOR]: SECTIONS.STATS_CALCULATOR,
-    }[dir] ?? SECTIONS.CHARACTERS
-  )
+  return dir && SECTION_LIST.includes(dir)
+    ? dir
+    : DEFAULT_SECTION
 }

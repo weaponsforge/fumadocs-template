@@ -2,7 +2,7 @@ import {
   DOCS_ROUTE_SEGMENT,
   LLMS_MDX_ROUTE_SEGMENT,
 } from './routes'
-import { PUBLIC_EXCEPTIONS } from './routes'
+import { PRIVATE_PAGES, PUBLIC_EXCEPTIONS } from './routes'
 
 /**
  * @class RouteUtil
@@ -45,8 +45,17 @@ export default class RouteUtil {
   }
 
   /**
-   * Returns `true` if a route has public access.
-   * Returns `false` if a page has private access
+   * Single private pages outside the private routes, eg. a private page in a public section
+   * @param pathname - Route
+   * @returns {boolean}
+   */
+  isPrivatePage (pathname: string): boolean {
+    return PRIVATE_PAGES.includes(this.toCanonicalDocsPath(pathname))
+  }
+
+  /**
+   * Returns `true` if a route has private access.
+   * Returns `false` if a page has public access
    * @param {string} route - Route or path to a page resource.
    *    Can start with `"/docs"` or `"/llms.mdx"`
    * @returns {boolean}
@@ -54,11 +63,13 @@ export default class RouteUtil {
   isPrivateRoute (route: string) {
     const cannonicalPath = this.toCanonicalDocsPath(route)
 
-    const isPrivate =
+    const isUnderPrivateRoute =
       !this.isPublicException(route) &&
       this.PRIVATE_ROUTES.some(prefix =>
         cannonicalPath === prefix || cannonicalPath.startsWith(`${prefix}/`),
       )
+
+    const isPrivate = isUnderPrivateRoute || this.isPrivatePage(route)
 
     return isPrivate
   }

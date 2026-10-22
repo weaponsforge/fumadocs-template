@@ -2,15 +2,18 @@
   "name": "fumadocs-template",
   "version": "1.4.2",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "next build",
-    "dev": "next dev --turbo",
+    "build": "npm run routes:build && next build",
+    "dev": "npm run routes:build && next dev --turbo",
     "start": "next start",
-    "postinstall": "fumadocs-mdx",
-    "lint": "eslint",
+    "postinstall": "fumadocs-mdx && npm run routes:build",
+    "routes:build": "fumadocs-routes -o ./.source",
+    "routes:check": "fumadocs-routes -o ./.source --strict",
+    "lint": "npm run routes:check && eslint",
     "lint:fix": "eslint --fix",
-    "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
-    "docker:webpack": "next dev --webpack",
+    "types:check": "npm run routes:check && fumadocs-mdx && next typegen && tsc --noEmit",
+    "docker:webpack": "npm run routes:build && next dev --webpack",
     "docker:build": "IS_BUILD_DOCKER=1 npm run build"
   },
   "dependencies": {
@@ -34,6 +37,7 @@
     "@types/react-dom": "^19.3.0",
     "eslint-config-next": "^16.4.0",
     "eslint-plugin-import": "^2.32.0",
+    "fumadocs-routes": "^1.1.7",
     "postcss": "^8.5.30",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
