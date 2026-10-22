@@ -18,7 +18,7 @@ export default function AuthWidget() {
   }, [isAccessDenied])
 
   return (
-    <div className="flex flex-col items-center gap-3 min-w-sm p-8 rounded-xl bg-white ">
+    <div className="flex flex-col items-center gap-3 min-w-sm p-8 rounded-xl bg-white text-neutral-900">
       <h1 className="font-medium text-4xl">
         {errorCode}
       </h1>
