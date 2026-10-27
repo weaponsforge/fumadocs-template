@@ -246,6 +246,7 @@ Rules:
 3. **Only explicitly written values count.** A nested `meta.json` without a `private` key (e.g. one added just for sidebar ordering) inherits from its parent; it does not reset the subtree to public. The zod schemas in `source.config.ts` default `private` to `false` for runtime typing only.
 4. A non-boolean `private` value fails the generator with the file path.
 5. `"private": true` in the root `content/docs/meta.json` makes the whole site private.
+6. **Titles, URLs and descriptions of private pages are public metadata.** The docs layout passes the full page tree to every visitor, so they appear in the sidebar data of every page, and a private page's `description` shows in its neighbours' previous/next footer links. Only the page content is gated: keep anything secret out of `title` and `description`.
 
 Current content: `secrets/` and `stats-calculator/` are private, `secrets/index.mdx` and `secrets/skill-tips.mdx` are public pages inside it, and `characters/(classes)/elf.mdx` is a private page in a public section.
 

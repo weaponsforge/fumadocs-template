@@ -19,7 +19,8 @@ import {
 
 // Runs against a "local" production build with Google OAuth configured (see setup.ts) and
 // no session: no private docs content may be served, in any representation.
-// Private titles and URLs in the sidebar are intended and not checked.
+// Private titles, URLs and descriptions are public metadata (see docs/AUTHENTICATION.md)
+// and not checked.
 
 const pages = getDocsPages()
 const privatePages = pages.filter((page) => page.isPrivate)
