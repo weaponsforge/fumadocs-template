@@ -91,12 +91,16 @@ Test commands are under [Testing and verification](#testing-and-verification).
 ```bash
 npm test              # Vitest unit tests, single run (vitest run)
 npm run test:watch    # Vitest in watch mode
+npm run test:e2e      # builds the app, serves it on :3100 and runs the e2e privacy tests over HTTP
 ```
 
-- Vitest (`vitest.config.mts`) runs `src/__tests__/**/*.test.ts` in a Node environment. Test files outside `src/__tests__/` don't run.
+- Vitest (`vitest.config.mts`) runs `src/__tests__/**/*.test.{ts,tsx}` in a Node environment, except `src/__tests__/e2e/`. Unit tests outside `src/__tests__/` don't run.
 - Test files mirror the path of the code under test, e.g. `src/lib/utils.ts` → `src/__tests__/lib/utils.test.ts`.
 - Tests that import `@/lib/routes` mock `collections/docs-routes.json` with a fixture so they don't depend on `content/docs/`.
-- Before committing, `npm run verify` (lint + types:check) and `npm test` must pass. Run `npm run build` too when changing routes, config or content loading.
+- End-to-end docs privacy tests live in `src/__tests__/e2e/` and run with `vitest.e2e.config.mts`. Its `setup.ts` (Vitest global setup) runs `npm run build` (overwriting `.next/`), then starts `next start` with dummy Google credentials and no session, and stops it after the run. Set `e2e_SKIP_BUILD=1` in the shell to reuse the last build (it still rebuilds when content or app code is newer) and `e2e_PORT` to change the port; Vitest doesn't read `.env.local`.
+- `src/__tests__/e2e/routes.test.ts` deliberately reads the real `content/docs/`. `lib/oracle.ts` resolves `private` for `.mdx` and `.md` pages from `meta.json` and frontmatter, independently of `RouteHandler`, so new private pages are covered without editing the test. Titles, URLs and descriptions of private pages are public metadata (`docs/AUTHENTICATION.md`) and aren't checked.
+- Before committing, `npm run verify` (lint + types:check) and `npm test` must pass.
+- Run `npm run build` and `npm run test:e2e` when changing routes, auth, config, content loading, `private` flags, or adding, moving or removing pages under `content/docs/`.
 
 ## Conventions
 

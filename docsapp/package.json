@@ -17,7 +17,8 @@
     "docker:webpack": "npm run routes:build && next dev --webpack",
     "docker:build": "IS_BUILD_DOCKER=1 npm run build",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "vitest run -c vitest.e2e.config.mts"
   },
   "dependencies": {
     "better-auth": "^1.7.14",

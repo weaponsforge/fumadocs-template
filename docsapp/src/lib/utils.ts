@@ -120,3 +120,28 @@ export const isGoogleOauthSet = (): boolean => {
 export const toConstKey = (slug: string) => {
   return slug.replace(/[^a-zA-Z0-9]+/g, '_').toUpperCase()
 }
+
+/**
+ * Percent-decodes a path (including `%2F`) until it stops changing, so the gate never
+ * decodes fewer layers than a route does. Docs pages decode once; `/og` and
+ * `/llms.mdx` decode twice (Next.js param + Fumadocs `getPage()`), so
+ * `/og/s%2565crets/image.webp` serves the `/docs/secrets` image.
+ * @param {string} pathname - url route, possibly percent-encoded
+ * @returns {string} Fully decoded path
+ * @throws {URIError} On malformed encoding, or encoding nested too deep
+ */
+export const decodePathname = ({
+  pathname, maxDecodePasses = 5,
+}: { pathname: string, maxDecodePasses: number }): string => {
+  let decoded = pathname
+
+  for (let pass = 0; pass < maxDecodePasses; pass++) {
+    const next = decodeURIComponent(decoded)
+
+    if (next === decoded) return decoded
+    decoded = next
+  }
+
+  const errMsg = `Path is still encoded after ${maxDecodePasses} decodes: ${pathname}`
+  throw new URIError(errMsg)
+}

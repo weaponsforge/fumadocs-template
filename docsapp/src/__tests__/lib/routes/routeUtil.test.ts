@@ -40,8 +40,22 @@ describe('RouteUtil.toCanonicalDocsPath', () => {
     ['/llms.mdx/secrets/map.mdx', '/docs/secrets/map'],
     ['/og/secrets/map/image.webp', '/docs/secrets/map'],
     ['/og/image.webp', '/docs'],
+    ['/docs/s%65crets/map', '/docs/secrets/map'],
+    ['/docs/secrets%2Fmap', '/docs/secrets/map'],
+    ['/docs/s%2565crets/map', '/docs/secrets/map'],
+    ['/docs/secrets/map.md%78', '/docs/secrets/map'],
+    ['/llms.mdx/s%65crets/map', '/docs/secrets/map'],
+    ['/og/%73ecrets/map/image.webp', '/docs/secrets/map'],
   ])('maps %s to %s', (pathname, expected) => {
     expect(RouteHandler.toCanonicalDocsPath(pathname)).toBe(expected)
+  })
+
+  it.each([
+    '/docs/%',
+    '/docs/secrets/%E0%A4%A',
+    `/docs/%${'25'.repeat(5)}73ecrets`,
+  ])('throws a URIError for %s', (pathname) => {
+    expect(() => RouteHandler.toCanonicalDocsPath(pathname)).toThrow(URIError)
   })
 })
 
@@ -127,6 +141,40 @@ describe('RouteUtil.isPrivateRoute', () => {
     it('only matches the exact page', () => {
       expect(RouteHandler.isPrivateRoute('/docs/characters/elf-guide')).toBe(false)
       expect(RouteHandler.isPrivateRoute('/docs/characters')).toBe(false)
+    })
+  })
+
+  describe('percent-encoded paths', () => {
+    // Routes behind the proxy decode these to the plain path (the /og and /llms.mdx
+    // handlers decode two layers and %2F), so they must match like it
+    it.each([
+      '/docs/s%65crets/map',
+      '/docs/%73tats-calculator',
+      '/docs/characters/el%66',
+      '/docs/characters%2Felf',
+      '/docs/characters/hidde%6E/boss',
+      '/docs/s%2565crets/map',
+      '/docs/secrets/map.md%78',
+      '/llms.mdx/s%65crets/map',
+      '/og/%73ecrets/map/image.webp',
+    ])('%s is private', (route) => {
+      expect(RouteHandler.isPrivateRoute(route)).toBe(true)
+    })
+
+    it.each([
+      '/docs/s%65crets',
+      '/docs/secrets/skill-tip%73',
+      '/docs/w%65apons',
+    ])('%s stays public', (route) => {
+      expect(RouteHandler.isPrivateRoute(route)).toBe(false)
+    })
+
+    it.each([
+      '/docs/%',
+      '/docs/weapons/%E0%A4%A',
+      `/docs/weapons/%${'25'.repeat(5)}73word`,
+    ])('treats undecodable %s as private', (route) => {
+      expect(RouteHandler.isPrivateRoute(route)).toBe(true)
     })
   })
 

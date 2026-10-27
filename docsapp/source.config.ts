@@ -19,6 +19,7 @@ export const docs = defineDocs({
     async: true,
   },
   meta: {
+    files: ['**/meta.json'],
     schema: metaSchema.extend({
       private: z.boolean().default(false),
     }),
