@@ -10,9 +10,9 @@ export async function setup() {
   }
 
   // Set e2e_SKIP_BUILD=1 to reuse the last build while iterating on tests.
-  // `npm run build` also regenerates .source/docs-routes.json.
+  // No stdin, so the build never waits for Next.js' interactive upgrade prompt
   if (process.env.e2e_SKIP_BUILD !== '1') {
-    execSync('npm run build', { env, stdio: 'inherit' })
+    execSync('npm run build', { env, stdio: ['ignore', 'inherit', 'inherit'] })
   }
 
   const { server, getServerLog } = startServer(env)
