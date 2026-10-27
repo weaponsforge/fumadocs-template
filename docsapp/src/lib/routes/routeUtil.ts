@@ -1,9 +1,15 @@
+import { decodePathname } from '@/lib/utils'
+
 import {
   DOCS_ROUTE_SEGMENT,
   LLMS_MDX_ROUTE_SEGMENT,
   OG_ROUTE_SG,
 } from './routes'
 import { PRIVATE_PAGES, PUBLIC_EXCEPTIONS } from './routes'
+
+// Routes decode at most 2 percent-encoded layers, so real paths settle well before this cap.
+// A path still encoded after it throws and is treated as private.
+const MAX_DECODE_PASSES = 5
 
 /**
  * @class RouteUtil
@@ -17,12 +23,18 @@ export default class RouteUtil {
   }
 
   /**
-   * Maps any representation of a path to its canonical `/docs/...` form,
+   * Maps any representation of a path to its canonical, decoded `/docs/...` form,
    * so exceptions and private checks only need to be written once.
-   * @param {string} pathname - url route
+   * @param {string} route - url route, possibly percent-encoded
    * @returns {string}
+   * @throws {URIError} On malformed percent-encoding
    */
-  toCanonicalDocsPath (pathname: string): string {
+  toCanonicalDocsPath (route: string): string {
+    const pathname = decodePathname({
+      pathname: route,
+      maxDecodePasses: MAX_DECODE_PASSES,
+    })
+
     if (pathname === `/${LLMS_MDX_ROUTE_SEGMENT}`) {
       return `/${DOCS_ROUTE_SEGMENT}`
     }
@@ -73,11 +85,19 @@ export default class RouteUtil {
    * Returns `true` if a route has private access.
    * Returns `false` if a page has public access
    * @param {string} route - Route or path to a page resource.
-   *    Can start with `"/docs"` or `"/llms.mdx"`
+   *    Can start with `"/docs"` or `"/llms.mdx"`, and may be percent-encoded.
+   *    Malformed encoding is treated as private.
    * @returns {boolean}
    */
   isPrivateRoute (route: string) {
-    const cannonicalPath = this.toCanonicalDocsPath(route)
+    let cannonicalPath: string
+
+    try {
+      cannonicalPath = this.toCanonicalDocsPath(route)
+    } catch {
+      // Fail closed: a path that can't be decoded can't be proven public
+      return true
+    }
 
     const isUnderPrivateRoute =
       !this.isPublicException(route) &&

@@ -42,7 +42,7 @@ body:
           Arch: x64
           Version: #1 SMP Tue Nov 5 00:21:55 UTC 2024
         Binaries:
-          Node: 24.11.0
+          Node: 24.22.1
           npm: 11.6.1
           Yarn: 1.22.22
           pnpm: N/A

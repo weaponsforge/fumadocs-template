@@ -33,7 +33,7 @@ https://fumadocs-template-ten.vercel.app/
 
 ```text
 Recommended version (used within this project)
-node v24.11.0
+node v24.22.1
 npm v11.6.1
 ```
 
@@ -52,7 +52,7 @@ npm v11.6.1
 
 #### 3. Docker (optional)
 
-Dockerfile and compose files are available for running the app using Docker.
+Dockerfile and compose files are available for running the app [using Docker](#-quickstart).
 
 <br>
 
@@ -90,6 +90,8 @@ Open http://localhost:3000 with your browser to see the result.
 
 > [!NOTE]
 > Look over the [Environment Variables](#environment-variables) section for more building and Authentication options.
+
+<br>
 
 ## ✍️ Adding New Content
 
@@ -136,13 +138,13 @@ Open http://localhost:3000 with your browser to see the result.
 
    The nearest explicitly written value wins, and a missing `private` key inherits from the parent folder.
 
-5. Regenerate the route lists with [fumadocs-routes](https://github.com/weaponsforge/fumadocs-routes):
+5. Regenerate the route lists with [fumadocs-routes](https://www.npmjs.com/package/fumadocs-routes):
 
    ```sh
    npm run routes:build
    ```
 
-   This writes `/.source/docs-routes.json`, which `proxy.ts` and the docs source use to gate private routes. It runs automatically on `npm install`, `npm run dev` and `npm run build`. After editing a `private` flag while `npm run dev` is running, either run `npm run routes:build` in another terminal, or restart the dev server, since `npm run dev` regenerates `docs-routes.json` on start. Never edit the generated route lists by hand. Run `npm run verify` afterwards: it also runs the strict `routes:check`.
+   This writes `/.source/docs-routes.json`, which `proxy.ts` and the docs source use to gate private routes. It runs automatically on `npm install`, `npm run dev` and `npm run build`. After editing a `private` flag while `npm run dev` is running, either run `npm run routes:build` in another terminal, or restart the dev server, since `npm run dev` regenerates `docs-routes.json` on start. Never edit the generated route lists by hand. Run `npm run verify` afterwards: it also runs the strict `routes:check`. Then run `npm run test:e2e` to confirm the pages are gated.
 
    > ⚠️ **INFO**:<br>
    > `private` flags only gate routes when Google OAuth is configured. See [AUTHENTICATION.md](/docsapp/docs/AUTHENTICATION.md) for the full rules.
@@ -216,7 +218,7 @@ Create a `.env.local` file from the `.env.example` file.
 | --- | --- |
 | GOOGLE_CLIENT_ID | Google OAuth2 client ID linked with your Google Cloud Platform project. |
 | GOOGLE_CLIENT_SECRET | Google OAuth2 client secret associated with the `GOOGLE_CLIENT_ID` |
-| BETTER_AUTH_SECRET | Better Auth secret used to sign session cookies (any long random string will do) |
+| BETTER_AUTH_SECRET | Better Auth secret used to sign session cookies: at least 32 random characters, eg. from `openssl rand -base64 32` |
 | BETTER_AUTH_URL | Your root domain URL, beginning with `http://` or `https://` protocol. |
 | ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from **all email domains** (any Google account, including Google Workspace domains).</quote> |
 | ALLOWED_EMAILS | Hard-coded list of comma-separated emails allowed to sign-in with Google.<br><quote>Leave it blank or unset if you want to allow sign-in from all **Google accounts**.</quote> |
@@ -231,6 +233,8 @@ Create a `.env.local` file from the `.env.example` file.
 | GH_REPOSITORY | GitHub repository containing this documentation app |
 | GH_REPO_DEFAULT_BRANCH | Default branch of the `GH_REPOSITORY`. Currently unused by the app (no default). |
 
+<br>
+
 ## 📜 Available Scripts
 
 These scripts, compatible with running in Node and Docker, run various TypeScript scripts and tests.
@@ -244,11 +248,17 @@ Runs the Next.js app in production mode. Requires running `"npm run build"` firs
 
 ### `npm test`
 
-Runs the Vitest unit tests once: `*.test.ts` and `*.test.tsx` files in the `docsapp/src/__tests__/` directory.
+Runs the Vitest unit tests once: `*.test.ts` and `*.test.tsx` files in the `docsapp/src/__tests__/` directory, except the end-to-end privacy tests in `src/__tests__/e2e/` (see `npm run test:e2e`).
 
 ### `npm run test:watch`
 
 Runs the Vitest unit tests in watch mode.
+
+### `npm run test:e2e`
+
+Builds the app, serves it with `next start` on port 3100 with dummy Google credentials and no session, and checks over HTTP that no private docs content is served in any form (pages, `.mdx`, `/llms.mdx`, OG images, RSC payloads, search, `llms.txt`, protected assets).
+
+Set `e2e_SKIP_BUILD=1` to reuse the last build, or `e2e_PORT` to change the port. Run it after changing routes, auth, config, content loading or `private` flags.
 
 ### `npm run dev`
 
