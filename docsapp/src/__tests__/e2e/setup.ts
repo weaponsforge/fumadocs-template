@@ -11,7 +11,8 @@ export async function setup() {
     throw new Error(errMsg)
   }
 
-  // Set e2e_SKIP_BUILD=1 to reuse the last build while iterating on tests.
+  // Set e2e_SKIP_BUILD=1 in the shell to reuse the last build while iterating on tests,
+  // eg. `e2e_SKIP_BUILD=1 npm run test:e2e`. Vitest doesn't read .env.local.
   // A build older than the app or content is rebuilt anyway.
   const staleInput = process.env.e2e_SKIP_BUILD === '1'
     ? findStaleBuildInput()
