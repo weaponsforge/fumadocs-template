@@ -1,11 +1,15 @@
 name: Run CI Tests
 
-# This workflow lints the docsapp directory
-# And will trigger on push to *any* branch except main
+# This workflow lints, type-checks and tests the docsapp directory
+# And will trigger on push to *any* branch except master
 on:
   push:
     branches-ignore:
       - master
+
+defaults:
+  run:
+    working-directory: docsapp
 
 jobs:
   lint-app:
@@ -15,50 +19,61 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v6
 
-      - name: Use NodeJS v24
+      - name: Use NodeJS v24.22.1
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 24.22.1
+          cache: npm
+          cache-dependency-path: docsapp/package-lock.json
 
       - name: Install Dependencies
-        run: |
-          cd docsapp
-          npm ci
+        run: npm ci
 
       - name: Lint
-        run: |
-          cd docsapp
-          npm run lint
+        run: npm run lint
 
       - name: Types Check
-        run: |
-          cd docsapp
-          npm run types:check
+        run: npm run types:check
 
   test-app:
     name: Unit Tests
     needs: lint-app
     runs-on: ubuntu-latest
-    permissions:
-      checks: write
-      pull-requests: write
-
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v6
 
       - name: Use NodeJS v24.22.1
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: v24.22.1
-          registry-url: https://registry.npmjs.org/
+          node-version: 24.22.1
+          cache: npm
+          cache-dependency-path: docsapp/package-lock.json
 
       - name: Install Dependencies
-        run: |
-          cd docsapp
-          npm ci
+        run: npm ci
 
       - name: Test
-        run: |
-          cd docsapp
-          npm test
+        run: npm test
+
+  e2e-app:
+    name: E2E Privacy Tests
+    needs: lint-app
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v6
+
+      - name: Use NodeJS v24.22.1
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.22.1
+          cache: npm
+          cache-dependency-path: docsapp/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: E2E Tests
+        run: npm run test:e2e
