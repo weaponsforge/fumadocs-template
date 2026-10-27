@@ -33,7 +33,7 @@ https://fumadocs-template-ten.vercel.app/
 
 ```text
 Recommended version (used within this project)
-node v24.11.0
+node v24.22.1
 npm v11.6.1
 ```
 
@@ -52,7 +52,7 @@ npm v11.6.1
 
 #### 3. Docker (optional)
 
-Dockerfile and compose files are available for running the app using Docker.
+Dockerfile and compose files are available for running the app [using Docker](#-quickstart).
 
 <br>
 
@@ -90,6 +90,8 @@ Open http://localhost:3000 with your browser to see the result.
 
 > [!NOTE]
 > Look over the [Environment Variables](#environment-variables) section for more building and Authentication options.
+
+<br>
 
 ## ✍️ Adding New Content
 
@@ -136,7 +138,7 @@ Open http://localhost:3000 with your browser to see the result.
 
    The nearest explicitly written value wins, and a missing `private` key inherits from the parent folder.
 
-5. Regenerate the route lists with [fumadocs-routes](https://github.com/weaponsforge/fumadocs-routes):
+5. Regenerate the route lists with [fumadocs-routes](https://www.npmjs.com/package/fumadocs-routes):
 
    ```sh
    npm run routes:build
@@ -230,6 +232,8 @@ Create a `.env.local` file from the `.env.example` file.
 | GH_USERNAME | Your GitHub username |
 | GH_REPOSITORY | GitHub repository containing this documentation app |
 | GH_REPO_DEFAULT_BRANCH | Default branch of the `GH_REPOSITORY`. Currently unused by the app (no default). |
+
+<br>
 
 ## 📜 Available Scripts
 

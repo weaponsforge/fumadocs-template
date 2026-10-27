@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-Welcome to the **fumadocs-template** repository! We're excited to have you contribute to creating standards and patterns for integrating access-controlled documentation source content with [Fumadocs](https://github.com/fuma-nama/fumadocs) - particularly wiring Google OAuth2 signin in its Next.js `proxyts` (middleware) redirects and session checks.
+Welcome to the **fumadocs-template** repository! We're excited to have you contribute to creating standards and patterns for integrating access-controlled documentation source content with [Fumadocs](https://github.com/fuma-nama/fumadocs) - particularly wiring Google OAuth2 signin in its Next.js `proxy.ts` (middleware) redirects and session checks.
 
 To ensure a smooth contribution process for everyone, please follow these guidelines.
 
