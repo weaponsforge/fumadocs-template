@@ -41,7 +41,7 @@ Test commands are under [Testing and verification](#testing-and-verification).
 
 ## Tech stack
 
-- **Node.js v24+** (the Dockerfile pins `node:24.11.0-alpine`)
+- **Node.js v24+** (the Dockerfile pins `node:24.22.1-alpine`)
 - **Next.js 16** (App Router, Server Components). Middleware lives in `src/proxy.ts`, Next 16's rename of `middleware.ts`; don't create a `middleware.ts`.
 - **React 19** (Server Components) with **TypeScript** (strict mode)
 - **Fumadocs**: fumadocs-core/ui 16 + fumadocs-mdx 15 (versions pinned)

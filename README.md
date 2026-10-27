@@ -33,7 +33,7 @@ https://fumadocs-template-ten.vercel.app/
 
 ```text
 Recommended version (used within this project)
-node v24.11.0
+node v24.22.1
 npm v11.6.1
 ```
 
